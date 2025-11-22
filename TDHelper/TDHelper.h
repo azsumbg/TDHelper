@@ -209,6 +209,8 @@ namespace dll
 				else temp_ptr[i] = m_ptr[i + 1];
 			}
 
+			free(m_ptr);
+			m_ptr = temp_ptr;
 			--max_size;
 			--next_pos;
 		}
