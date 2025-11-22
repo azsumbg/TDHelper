@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="TDHelper/TDHelper.vcxproj" Id="edd483fa-b3e4-4b05-908d-712242663de1" />
+</Solution>
