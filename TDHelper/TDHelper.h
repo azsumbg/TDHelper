@@ -356,7 +356,21 @@ namespace dll
 		void set_height(float new_height);
 	};
 
+	class TDHELPER_API ASSETS :public PROTON
+	{
+	private:
+		assets _type{ assets::rock };
 
+		ASSETS(assets _what_type, float _start_x, float _start_y);
+
+	public:
+		
+		assets get_type()const;
+
+		void Release();
+
+		friend TDHELPER_API ASSETS* AssetFactory(assets what_type, float start_x, float start_y);
+	};
 
 
 
@@ -366,4 +380,8 @@ namespace dll
 
 	//FUNCTIONS *****************************************************
 
+
+
+	TDHELPER_API ASSETS* AssetFactory(assets what_type, float start_x, float start_y);
+	
 }

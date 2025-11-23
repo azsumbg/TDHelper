@@ -129,8 +129,55 @@ void dll::PROTON::set_height(float new_height)
 
 //////////////////////////////////////////
 
+// ASSETS CLASS *************************
+
+dll::ASSETS::ASSETS(assets _what_type, float _start_x, float _start_y) :PROTON(_start_x, _start_y)
+{
+	_type = _what_type;
+
+	switch (_type)
+	{
+	case assets::rock:
+		new_dims(100.0f, 100.0f);
+		break;
+
+	case assets::small_tree:
+		new_dims(30.0f, 50.0f);
+		break;
+
+	case assets::mid_tree:
+		new_dims(45.0f, 50.0f);
+		break;
+
+	case assets::big_tree:
+		new_dims(65.0f, 60.0f);
+		break;
+	}
+}
+
+assets dll::ASSETS::get_type()const
+{
+	return _type;
+}
+
+void dll::ASSETS::Release()
+{
+	delete this;
+}
+
+
+////////////////////////////////////////
 
 
 
 
+// FUNCTION DEFINITIONS *********************************
 
+TDHELPER_API dll::ASSETS* dll::AssetFactory(assets what_type, float start_x, float start_y)
+{
+	dll::ASSETS* ret{ nullptr };
+
+	ret = new dll::ASSETS(what_type, start_x, start_y);
+
+	return ret;
+}
