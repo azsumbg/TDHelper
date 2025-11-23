@@ -114,8 +114,13 @@ namespace dll
 
 				free(m_ptr);
 
+				m_ptr = nullptr;
+
 				max_size = other->max_size;
 				next_pos = other->next_pos;
+
+				m_ptr = reinterpret_cast<T*>(calloc(max_size, sizeof(T)));
+				if (!mPtr)throw EXCEPTION(err_pointer);
 
 				for (size_t i = 0; i < next_pos; ++i)m_ptr[i] = other[i];
 			}
@@ -128,10 +133,10 @@ namespace dll
 
 				free(m_ptr);
 
+				m_ptr = other->m_ptr;
+
 				max_size = other->max_size;
 				next_pos = other->next_pos;
-
-				for (size_t i = 0; i < next_pos; ++i)m_ptr[i] = other[i];
 
 				other->m_ptr = nullptr;
 			}
@@ -252,6 +257,51 @@ namespace dll
 			--next_pos;
 		}
 
+		BAG& operator=(BAG& other)
+		{
+			if (!m_ptr || !other->m_ptr)throw EXCEPTION(err_pointer);
+			else
+			{
+				if (other->empty())throw EXCEPTION(err_data);
+
+				if (m_ptr != other->m_ptr)
+				{
+					free(m_ptr);
+
+					max_size = other->max_size;
+					next_pos = other->next_pos;
+
+					m_ptr = reinterpret_cast<T*>(calloc(max_size, sizeof(T)));
+
+					if (!m_ptr)throw EXCEPTION(err_pointer);
+					else
+						for (size_t i = 0; i < next_pos; ++i)m_ptr[i] = other->m_ptr[i];
+				}
+
+			}
+
+			return *this;
+		}
+		BAG& operator=(BAG&& other)
+		{
+			if (!other->m_ptr)throw EXCEPTION(err_pointer);
+
+			if (m_ptr != other->m_ptr)
+			{
+				free(m_ptr);
+
+				max_size = other->max_size;
+				next_pos = other->next_pos;
+
+				m_ptr = other->m_ptr;
+
+				other->m_ptr = nullptr;
+			}
+
+			return *this;
+		}
+
+
 		T& operator[](size_t index)
 		{
 			if (!m_ptr)throw EXCEPTION(err_pointer);
@@ -260,7 +310,6 @@ namespace dll
 
 			return m_ptr[index];
 		}
-
 	};
 
 
