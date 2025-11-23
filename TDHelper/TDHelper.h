@@ -312,8 +312,58 @@ namespace dll
 		}
 	};
 
+	//////////////////////////////////////////////////////////////////
+
+	class TDHELPER_API RANDIT
+	{
+	private:
+		std::mt19937* twister{ nullptr };
+
+	public:
+		RANDIT();
+		~RANDIT();
+
+		int operator()(int min, int max);
+	};
+
+	class TDHELPER_API PROTON
+	{
+	protected:
+		float _width{ 0 };
+		float _height{ 0 };
+
+	public:
+		FPOINT start{};
+		FPOINT end{};
+		FPOINT center{};
+
+		float x_radius{ 0 };
+		float y_radius{ 0 };
+
+		PROTON();
+		PROTON(float sx, float sy);
+		PROTON(float sx, float sy, float swidth, float sheight);
+
+		virtual ~PROTON() {};
+
+		void new_dims(float new_width, float new_height);
+		void set_edges();
+
+		float get_width()const;
+		float get_height()const;
+
+		void set_width(float new_width);
+		void set_height(float new_height);
+	};
 
 
+
+
+
+
+
+
+
+	//FUNCTIONS *****************************************************
 
 }
-
