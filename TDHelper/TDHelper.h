@@ -17,6 +17,7 @@ constexpr float ground{ 750.0f };
 constexpr int err_pointer{ 1111 };
 constexpr int err_index{ 1112 };
 constexpr int err_data{ 1113 };
+constexpr int err_wrong_copy{ 1114 };
 
 enum class dirs { up = 0, right = 1, left = 2, down = 3, stop = 4 };
 
@@ -51,6 +52,7 @@ namespace dll
 		const wchar_t* pointer_error{ L"Error in base pointer !" };
 		const wchar_t* index_error{ L"Error in index passed !" };
 		const wchar_t* data_error{ L"Invalid data read !" };
+		const wchar_t* copy_error{ L"Error in copy parameter!" };
 		const wchar_t* unknown_error{ L"Unknown error !" };
 
 		int error_occurred = -1;
@@ -73,6 +75,9 @@ namespace dll
 
 			case err_data:
 				return data_error;
+
+			case err_wrong_copy:
+				return copy_error;
 			}
 		
 			return unknown_error;
@@ -100,6 +105,38 @@ namespace dll
 		{
 			max_size = lenght;
 		}
+
+		BAG(BAG& other)
+		{
+			if (m_ptr != other->m_ptr)
+			{
+				if (!other->m_ptr || other->empty())throw EXCEPTION(err_wrong_copy);
+
+				free(m_ptr);
+
+				max_size = other->max_size;
+				next_pos = other->next_pos;
+
+				for (size_t i = 0; i < next_pos; ++i)m_ptr[i] = other[i];
+			}
+		}
+		BAG(BAG&& other)
+		{
+			if (m_ptr != other->m_ptr)
+			{
+				if (!other->m_ptr || other->empty())throw EXCEPTION(err_wrong_copy);
+
+				free(m_ptr);
+
+				max_size = other->max_size;
+				next_pos = other->next_pos;
+
+				for (size_t i = 0; i < next_pos; ++i)m_ptr[i] = other[i];
+
+				other->m_ptr = nullptr;
+			}
+		}
+
 		~BAG()
 		{
 			free(m_ptr);
