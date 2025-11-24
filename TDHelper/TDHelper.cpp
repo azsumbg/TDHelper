@@ -165,8 +165,155 @@ void dll::ASSETS::Release()
 	delete this;
 }
 
-
 ////////////////////////////////////////
+
+// SHOTS CLASS ************************
+
+void dll::SHOTS::SetPathInfo(float _ex, float _ey)
+{
+	move_sx = start.x;
+	move_sy = start.y;
+
+	move_ex = end.x;
+	move_ey = end.y;
+
+	ver_dir = false;
+	hor_dir = false;
+
+	if (move_sx == move_ex || (move_ex > start.x && move_ex <= end.x))
+	{
+		ver_dir = true;
+		return;
+	}
+	if (move_sy == move_ey || (move_ey > start.y && move_ey <= end.y))
+	{
+		hor_dir = true;
+		return;
+	}
+
+	slope = (move_ey - move_sy) / (move_ex - move_sx);
+	intercept = start.y - start.x * slope;
+}
+
+dll::SHOTS::SHOTS(shots _what, float _where_x, float _where_y, 
+	float _to_where_x, float _to_where_y, int _shot_modifier) :PROTON(_where_x, _where_y)
+{
+	_type = _what;
+
+	SetPathInfo(_to_where_x, _to_where_y);
+
+	switch (_type)
+	{
+	case shots::arrow:
+		new_dims(20.0f, 20.0f);
+		if (move_sy > move_ey)
+		{
+			if (move_sx > move_ex)dir = dirs::up_left;
+			else dir = dirs::up_right;
+		}
+		else
+		{
+			if (move_sx > move_ex)dir = dirs::down_left;
+			else dir = dirs::down_right;
+		}
+		strenght = 1.0f + _shot_modifier;
+		speed = 5.0f + _shot_modifier;
+		break;
+
+	case shots::cannonball:
+		new_dims(40.0f, 40.0f);
+		strenght = 5.0f + _shot_modifier;
+		speed = 3.0f + _shot_modifier;
+		break;
+
+	case shots::spell:
+		new_dims(50.0f, 50.0f);
+		strenght = 8.0f + _shot_modifier;
+		speed = 4.0f + _shot_modifier;
+		break;
+	}
+}
+
+bool dll::SHOTS::move()
+{
+	if (ver_dir)
+	{
+		if (move_ey < move_sy)
+		{
+			start.y -= speed;
+			set_edges();
+			if (start.y <= move_ey)return false;
+		}
+		else if (move_ey > move_sy)
+		{
+			start.y += speed;
+			set_edges();
+			if (end.y >= move_ey)return false;
+		}
+	}
+	if (hor_dir)
+	{
+		if (move_ex < move_sx)
+		{
+			start.x -= speed;
+			set_edges();
+			if (start.x <= move_ex)return false;
+		}
+		else if (move_ex > move_sy)
+		{
+			start.x += speed;
+			set_edges();
+			if (end.x >= move_ex)return false;
+		}
+	}
+
+	if (move_sx > move_ex)
+	{
+		start.x -= speed;
+		start.y = start.x * slope + intercept;
+		set_edges();
+		if (start.y >= ground || end.y <= sky || start.x >= scr_width || end.x <= 0 || start.x <= move_ex)return false;
+	}
+	if (move_sx < move_ex)
+	{
+		start.x += speed;
+		start.y = start.x * slope + intercept;
+		set_edges();
+		if (start.y >= ground || end.y <= sky || start.x >= scr_width || end.x <= 0 || start.x >= move_ex)return false;
+	}
+
+	return true;
+}
+int dll::SHOTS::get_frame()
+{
+	if (_type != shots::spell)return 0;
+
+	current_frame++;
+	if (current_frame > max_frames)current_frame = 0;
+
+	return current_frame;
+}
+int dll::SHOTS::get_strenght()const
+{
+	return strenght;
+}
+shots dll::SHOTS::get_type()const
+{
+	return _type;
+}
+void dll::SHOTS::Release()
+{
+	delete this;
+}
+
+///////////////////////////////////////
+
+
+
+
+
+
+
 
 
 
@@ -179,5 +326,15 @@ TDHELPER_API dll::ASSETS* dll::AssetFactory(assets what_type, float start_x, flo
 
 	ret = new dll::ASSETS(what_type, start_x, start_y);
 
+	return ret;
+}
+
+TDHELPER_API dll::SHOTS* dll::ShotFactory(shots what, float where_x, float where_y,
+	float to_where_x, float to_where_y, int shot_modifier)
+{
+	SHOTS* ret{ nullptr };
+
+	ret = new SHOTS(what, where_x, where_y, to_where_x, to_where_y, shot_modifier);
+	
 	return ret;
 }

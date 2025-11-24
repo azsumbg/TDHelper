@@ -19,7 +19,7 @@ constexpr int err_index{ 1112 };
 constexpr int err_data{ 1113 };
 constexpr int err_wrong_copy{ 1114 };
 
-enum class dirs { up = 0, right = 1, left = 2, down = 3, stop = 4 };
+enum class dirs { up = 0, right = 1, left = 2, down = 3, stop = 4, up_left = 5, up_right = 6, down_left = 7, down_right = 8 };
 
 enum class orcs { warrior1 = 0, warrior2 = 1, mage = 2, crusher = 3, flyer = 4, champion = 5 };
 enum class buildings {
@@ -27,7 +27,6 @@ enum class buildings {
 	mid_mage = 5, big_mage = 6, castle = 7, wall = 7
 };
 enum class assets { rock = 0, small_tree = 1, mid_tree = 2, big_tree = 3 };
-
 enum class shots { arrow = 0, cannonball = 1, spell = 2 };
 
 struct TDHELPER_API FPOINT
@@ -372,7 +371,48 @@ namespace dll
 		friend TDHELPER_API ASSETS* AssetFactory(assets what_type, float start_x, float start_y);
 	};
 
+	class TDHELPER_API SHOTS :public PROTON
+	{
+	private:
+		float move_sx{ 0 };
+		float move_sy{ 0 };
+		float move_ex{ 0 };
+		float move_ey{ 0 };
 
+		float slope{ 0 };
+		float intercept{ 0 };
+
+		bool ver_dir{ false };
+		bool hor_dir{ false };
+
+		shots _type{ shots::arrow };
+
+		int current_frame{ 0 };
+		int max_frames{ 63 };
+
+		int strenght = 1.0f;
+		
+		void SetPathInfo(float _ex, float _ey);
+
+		SHOTS(shots _what, float _where_x, float _where_y, 
+			float _to_where_x, float _to_where_y, int _shot_modifier);
+
+	public:
+		dirs dir{ dirs::stop };
+		float speed = 1.0f;
+
+		bool move();
+
+		int get_frame();
+		int get_strenght()const;
+
+		shots get_type()const;
+
+		void Release();
+
+		friend TDHELPER_API SHOTS* ShotFactory(shots what, float where_x, float where_y, 
+			float to_where_x, float to_where_y, int shot_modifier);
+	};
 
 
 
@@ -384,4 +424,8 @@ namespace dll
 
 	TDHELPER_API ASSETS* AssetFactory(assets what_type, float start_x, float start_y);
 	
+	TDHELPER_API SHOTS* ShotFactory(shots what, float where_x, float where_y,
+		float to_where_x, float to_where_y, int shot_modifier);
+
+
 }
