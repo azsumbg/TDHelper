@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "TDHelper.h"
 
-
 // RANDIT CLASS *************************
 
 dll::RANDIT::RANDIT()
@@ -319,6 +318,22 @@ void dll::SHOTS::Release()
 
 
 // FUNCTION DEFINITIONS *********************************
+
+float dll::Distance(FPOINT first_center, FPOINT second_center)
+{
+	float a = (float)(pow(abs(second_center.x - first_center.x), 2));
+	float b = (float)(pow(abs(second_center.y - first_center.y), 2));
+
+	return (float)(sqrt(a + b));
+}
+
+bool dll::Intersect(FPOINT first_center, FPOINT second_center, float first_radius_x, float second_radius_x,
+	float first_radius_y, float second_radius_y)
+{
+	if (abs(second_center.x - first_center.x) <= first_radius_x + second_radius_x
+		&& abs(second_center.y - first_center.y) <= first_radius_y + second_radius_y)return true;
+	return false;
+}
 
 TDHELPER_API dll::ASSETS* dll::AssetFactory(assets what_type, float start_x, float start_y)
 {

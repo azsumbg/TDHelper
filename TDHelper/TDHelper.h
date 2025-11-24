@@ -420,6 +420,10 @@ namespace dll
 
 	//FUNCTIONS *****************************************************
 
+	float Distance(FPOINT first_center, FPOINT second_center);
+
+	bool Intersect(FPOINT first_center, FPOINT second_center, float first_radius_x, float second_radius_x,
+		float first_radius_y, float second_radius_y);
 
 
 	TDHELPER_API ASSETS* AssetFactory(assets what_type, float start_x, float start_y);
