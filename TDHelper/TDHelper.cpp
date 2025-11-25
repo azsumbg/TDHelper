@@ -307,7 +307,255 @@ void dll::SHOTS::Release()
 
 ///////////////////////////////////////
 
+// BUILDINGS CLASS ********************
 
+dll::BUILDINGS::BUILDINGS(buildings _what, float _sx, float _sy) :PROTON(_sx, _sy)
+{
+	_type = _what;
+
+	switch (_type)
+	{
+	case buildings::castle:
+		new_dims(180.0f, 182.0f);
+		strenght = 5;
+		lifes = 50;
+		fire_rate = 200;
+		range = 75.0f;
+		max_frames = 4;
+		frame_delay = 15;
+		break;
+
+	case buildings::arhcer:
+		new_dims(37.0f, 85.0f);
+		strenght = 5;
+		lifes = 50;
+		fire_rate = 50;
+		range = 75.0f;
+		max_frames = 7;
+		frame_delay = 9;
+		break;
+
+	case buildings::small_cannon:
+		new_dims(75.0f, 34.0f);
+		strenght = 10;
+		lifes = 75;
+		fire_rate = 75;
+		range = 100.0f;
+		max_frames = 57;
+		frame_delay = 1;
+		break;
+
+	case buildings::mid_cannon:
+		new_dims(85.0f, 64.0f);
+		strenght = 15;
+		lifes = 100;
+		fire_rate = 100;
+		range = 130.0f;
+		max_frames = 9;
+		frame_delay = 7;
+		break;
+
+	case buildings::big_cannon:
+		new_dims(90.0f, 86.0f);
+		strenght = 30;
+		fire_rate = 130;
+		lifes = 150;
+		range = 150.0f;
+		max_frames = 90;
+		frame_delay = 1;
+		break;
+
+	case buildings::small_mage:
+		new_dims(65.0f, 85.0f);
+		strenght = 12;
+		lifes = 100;
+		fire_rate = 50;
+		range = 130.0f;
+		max_frames = 36;
+		frame_delay = 2;
+		break;
+
+	case buildings::mid_mage:
+		new_dims(44.0f, 85.0f);
+		strenght = 18;
+		lifes = 120;
+		fire_rate = 75;
+		range = 150.0f;
+		max_frames = 34;
+		frame_delay = 2;
+		break;
+
+	case buildings::big_mage:
+		new_dims(32.0f, 90.0f);
+		strenght = 30;
+		lifes = 180;
+		fire_rate = 100;
+		range = 200.0f;
+		max_frames = 97;
+		frame_delay = 1;
+		break;
+	}
+}
+buildings dll::BUILDINGS::get_type()const
+{
+	return _type;
+}
+void dll::BUILDINGS::set_type(buildings what)
+{
+	frame = 0;
+	_type = what;
+
+	switch (_type)
+	{
+	case buildings::castle:
+		new_dims(180.0f, 182.0f);
+		strenght = 5;
+		lifes = 50;
+		fire_rate = 200;
+		range = 75.0f;
+		max_frames = 4;
+		frame_delay = 15;
+		break;
+
+	case buildings::arhcer:
+		new_dims(37.0f, 85.0f);
+		strenght = 5;
+		lifes = 50;
+		fire_rate = 50;
+		range = 75.0f;
+		max_frames = 7;
+		frame_delay = 9;
+		break;
+
+	case buildings::small_cannon:
+		new_dims(75.0f, 34.0f);
+		strenght = 10;
+		lifes = 75;
+		fire_rate = 75;
+		range = 100.0f;
+		max_frames = 57;
+		frame_delay = 1;
+		break;
+
+	case buildings::mid_cannon:
+		new_dims(85.0f, 64.0f);
+		strenght = 15;
+		lifes = 100;
+		fire_rate = 100;
+		range = 130.0f;
+		max_frames = 9;
+		frame_delay = 7;
+		break;
+
+	case buildings::big_cannon:
+		new_dims(90.0f, 86.0f);
+		strenght = 30;
+		fire_rate = 130;
+		lifes = 150;
+		range = 150.0f;
+		max_frames = 90;
+		frame_delay = 1;
+		break;
+
+	case buildings::small_mage:
+		new_dims(65.0f, 85.0f);
+		strenght = 12;
+		lifes = 100;
+		fire_rate = 50;
+		range = 130.0f;
+		max_frames = 36;
+		frame_delay = 2;
+		break;
+
+	case buildings::mid_mage:
+		new_dims(44.0f, 85.0f);
+		strenght = 18;
+		lifes = 120;
+		fire_rate = 75;
+		range = 150.0f;
+		max_frames = 34;
+		frame_delay = 2;
+		break;
+
+	case buildings::big_mage:
+		new_dims(32.0f, 90.0f);
+		strenght = 30;
+		lifes = 180;
+		fire_rate = 100;
+		range = 200.0f;
+		max_frames = 97;
+		frame_delay = 1;
+		break;
+	}
+}
+int dll::BUILDINGS::attack()
+{
+	++fire_status;
+	if (fire_status >= fire_rate)
+	{
+		fire_status = 0;
+		return strenght;
+	}
+
+	return 0;
+}
+int dll::BUILDINGS::get_frame()
+{
+	--frame_delay;
+
+	if (frame_delay <= 0)
+	{
+		switch (_type)
+		{
+		case buildings::castle:
+			frame_delay = 15;
+			break;
+
+		case buildings::arhcer:
+			frame_delay = 9;
+			break;
+
+		case buildings::small_cannon:
+			frame_delay = 1;
+			break;
+
+		case buildings::mid_cannon:
+			frame_delay = 7;
+			break;
+
+		case buildings::big_cannon:
+			frame_delay = 1;
+			break;
+
+		case buildings::small_mage:
+			frame_delay = 2;
+			break;
+
+		case buildings::mid_mage:
+			frame_delay = 2;
+			break;
+
+		case buildings::big_mage:
+			frame_delay = 1;
+			break;
+		}
+
+		++frame;
+		if(frame > max_frames)frame = 0;
+	}
+
+	return frame;
+}
+int dll::BUILDINGS::get_range()const
+{
+	return range;
+}
+void dll::BUILDINGS::Release()
+{
+	delete this;
+}
+
+///////////////////////////////////////
 
 
 
@@ -351,5 +599,13 @@ TDHELPER_API dll::SHOTS* dll::ShotFactory(shots what, float where_x, float where
 
 	ret = new SHOTS(what, where_x, where_y, to_where_x, to_where_y, shot_modifier);
 	
+	return ret;
+}
+
+TDHELPER_API dll::BUILDINGS* dll::BuildingFactory(buildings what, float sx, float sy)
+{
+	BUILDINGS* ret{ nullptr };
+	ret = new BUILDINGS(what, sx, sy);
+
 	return ret;
 }

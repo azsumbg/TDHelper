@@ -414,7 +414,36 @@ namespace dll
 			float to_where_x, float to_where_y, int shot_modifier);
 	};
 
+	class TDHELPER_API BUILDINGS :public PROTON
+	{
+	private:
+		buildings _type{ buildings::arhcer };
+		int strenght{ 0 };
+		float range{ 0 };
 
+		int frame{ 0 };
+		int max_frames{ 0 };
+		int frame_delay{ 0 };
+
+		int fire_rate{ 0 };
+		int fire_status{ 0 };
+
+		BUILDINGS(buildings _what, float _sx, float _sy);
+
+	public:
+		int lifes{ 0 };
+
+		buildings get_type()const;
+		void set_type(buildings what);
+
+		int attack();
+		int get_frame();
+		int get_range() const;
+
+		void Release();
+
+		friend TDHELPER_API BUILDINGS* BuildingFactory(buildings what, float sx, float sy);
+	};
 
 
 
@@ -425,11 +454,11 @@ namespace dll
 	bool Intersect(FPOINT first_center, FPOINT second_center, float first_radius_x, float second_radius_x,
 		float first_radius_y, float second_radius_y);
 
-
 	TDHELPER_API ASSETS* AssetFactory(assets what_type, float start_x, float start_y);
 	
 	TDHELPER_API SHOTS* ShotFactory(shots what, float where_x, float where_y,
 		float to_where_x, float to_where_y, int shot_modifier);
 
+	TDHELPER_API BUILDINGS* BuildingFactory(buildings what, float sx, float sy);
 
 }
