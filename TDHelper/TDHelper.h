@@ -454,6 +454,56 @@ namespace dll
 	bool Intersect(FPOINT first_center, FPOINT second_center, float first_radius_x, float second_radius_x,
 		float first_radius_y, float second_radius_y);
 
+	template<primes T>bool Sort(BAG<T>& Mesh, bool ascending = true)
+	{
+		if (Mesh.empty() || Mesh.size() < 2)return false;
+
+		bool sorted{ false };
+
+		if (ascending)
+		{
+			while (!sorted)
+			{
+				sorted = true;
+
+				for (size_t count = 0; count < Mesh.size() - 1; ++count)
+				{
+					if (Mesh[i] > Mesh[i + 1])
+					{
+						T temp = Mesh[i];
+						Mesh[i] = Mesh[i + 1];
+						Mesh[i + 1] = temp;
+						sorted = false;
+					}
+				}
+			}
+		}
+		else
+		{
+			while (!sorted)
+			{
+				sorted = true;
+
+				for (size_t count = 0; count < Mesh.size() - 1; ++count)
+				{
+					if (Mesh[i] < Mesh[i + 1])
+					{
+						T temp = Mesh[i];
+						Mesh[i] = Mesh[i + 1];
+						Mesh[i + 1] = temp;
+						sorted = false;
+					}
+				}
+			}
+		}
+
+		return true;
+	}
+
+	bool TDHELPER_API Sort(BAG<FPOINT>& Mesh, FPOINT ref_point);
+
+
+
 	TDHELPER_API ASSETS* AssetFactory(assets what_type, float start_x, float start_y);
 	
 	TDHELPER_API SHOTS* ShotFactory(shots what, float where_x, float where_y,
