@@ -583,6 +583,34 @@ bool dll::Intersect(FPOINT first_center, FPOINT second_center, float first_radiu
 	return false;
 }
 
+bool dll::Sort(BAG<FPOINT>& Mesh, FPOINT ref_point)
+{
+	if (Mesh.empty() || Mesh.size() < 2)return false;
+
+	bool sorted = false;
+
+	while (!sorted)
+	{
+		sorted = true;
+
+		for (size_t count = 0; count < Mesh.size() - 1; ++count)
+		{
+			if (Distance(Mesh[count], ref_point) > Distance(Mesh[count + 1], ref_point))
+			{
+				FPOINT temp = Mesh[count];
+
+				Mesh[count] = Mesh[count + 1];
+				Mesh[count + 1] = temp;
+				sorted = false;
+			}
+
+		}
+	}
+
+	return true;
+}
+
+
 TDHELPER_API dll::ASSETS* dll::AssetFactory(assets what_type, float start_x, float start_y)
 {
 	dll::ASSETS* ret{ nullptr };
