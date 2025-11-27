@@ -557,13 +557,195 @@ void dll::BUILDINGS::Release()
 
 ///////////////////////////////////////
 
+// ORCS CLASS *************************
+
+dll::ORCS::ORCS(orcs _what, float _sx, float _sy) :PROTON(_sx, _sy)
+{
+	_type = _what;
+
+	switch (_type)
+	{
+	case orcs::warrior1:
+		new_dims(50.0f, 57.0f);
+		strenght = 10.0f;
+		speed = 0.8f;
+		lifes = 50;
+		max_frames = 7;
+		attack_delay = 25;
+		frame_delay = 9;
+		break;
+
+	case orcs::warrior2:
+		new_dims(55.0f, 57.0f);
+		strenght = 12.0f;
+		speed = 0.7f;
+		lifes = 60;
+		max_frames = 9;
+		attack_delay = 30;
+		frame_delay = 7;
+		break;
+
+	case orcs::healer:
+		new_dims(45.0f, 42.0f);
+		strenght = 15.0f;
+		speed = 0.5f;
+		lifes = 40;
+		max_frames = 45;
+		attack_delay = 50;
+		frame_delay = 1;
+		break;
+
+	case orcs::crusher:
+		new_dims(50.0f, 31.0f);
+		strenght = 18.0f;
+		speed = 0.6f;
+		lifes = 80;
+		max_frames = 39;
+		attack_delay = 60;
+		frame_delay = 2;
+		break;
+
+	case orcs::flyer:
+		new_dims(45.0f, 37.0f);
+		strenght = 10.0f;
+		speed = 1.0f;
+		lifes = 40;
+		max_frames = 33;
+		attack_delay = 20;
+		frame_delay = 3;
+		break;
+
+	case orcs::champion:
+		new_dims(150.0f, 148.0f);
+		strenght = 100.0f;
+		speed = 0.3f;
+		lifes = 150;
+		max_frames = 9;
+		attack_delay = 150;
+		frame_delay = 7;
+		break;
+	}
+}
+
+void dll::ORCS::Release()
+{
+	delete this;
+}
+void dll::ORCS::SetPathInfo(float _ex, float _ey)
+{
+	hor_dir = false;
+	ver_dir = false;
+
+	move_sx = start.x;
+	move_sy = start.y;
+
+	move_ex = _ex;
+	move_ey = _ey;
+
+	if (move_ex - move_sx == 0 || (move_ex > start.x && move_ex < end.x))
+	{
+		ver_dir = true;
+		return;
+	}
+	if (move_ey - move_sy == 0 || (move_ey > start.y && move_ey < end.y))
+	{
+		hor_dir = true;
+		return;
+	}
+
+	slope = (move_ey - move_sy) / (move_ex - move_sx);
+	intercept = move_sy - move_sx * slope;
+}
+
+orcs dll::ORCS::GetType()const
+{
+	return _type;
+}
+int dll::ORCS::GetFrame()
+{
+	--frame_delay;
+	
+	if (frame_delay <= 0)
+	{
+		switch (_type)
+		{
+		case orcs::warrior1:
+			frame_delay = 9;
+			break;
+
+		case orcs::warrior2:
+			frame_delay = 7;
+			break;
+
+		case orcs::healer:
+			frame_delay = 1;
+			break;
+
+		case orcs::crusher:
+			frame_delay = 2;
+			break;
+
+		case orcs::flyer:
+			frame_delay = 3;
+			break;
+
+		case orcs::champion:
+			frame_delay = 7;
+			break;
+		}
+	}
+
+	++frame;
+	if (frame > max_frames)frame = 0;
+
+	return frame;
+}
+int dll::ORCS::Attack()
+{
+	--attack_delay;
+
+	if (attack_delay <= 0)
+	{
+		switch (_type)
+		{
+		case orcs::warrior1:
+			attack_delay = 25;
+			break;
+
+		case orcs::warrior2:
+			attack_delay = 30;
+			break;
+
+		case orcs::healer:
+			attack_delay = 50;
+			break;
+
+		case orcs::crusher:
+			attack_delay = 60;
+			break;
+
+		case orcs::flyer:
+			attack_delay = 20;
+			break;
+
+		case orcs::champion:
+			attack_delay = 150;
+			break;
+		}
+
+		return strenght;
+	}
+
+	return 0;
+}
+
+bool dll::ORCS::Move(float gear)
+{
+	float my_speed = speed * gear;
+}
 
 
-
-
-
-
-
+////////////////////////////////////////
 
 // FUNCTION DEFINITIONS *********************************
 
@@ -636,4 +818,11 @@ TDHELPER_API dll::BUILDINGS* dll::BuildingFactory(buildings what, float sx, floa
 	ret = new BUILDINGS(what, sx, sy);
 
 	return ret;
+}
+
+TDHELPER_API dll::ORCS* dll::OrcFactory(orcs what, float sx, float sy)
+{
+
+
+
 }

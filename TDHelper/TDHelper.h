@@ -21,7 +21,7 @@ constexpr int err_wrong_copy{ 1114 };
 
 enum class dirs { up = 0, right = 1, left = 2, down = 3, stop = 4, up_left = 5, up_right = 6, down_left = 7, down_right = 8 };
 
-enum class orcs { warrior1 = 0, warrior2 = 1, mage = 2, crusher = 3, flyer = 4, champion = 5 };
+enum class orcs { warrior1 = 0, warrior2 = 1, crusher = 2, healer = 3, flyer = 4, champion = 5 };
 enum class buildings {
 	arhcer = 0, small_cannon = 1, mid_cannon = 2, big_cannon = 3, small_mage = 4,
 	mid_mage = 5, big_mage = 6, castle = 7, wall = 7
@@ -445,7 +445,47 @@ namespace dll
 		friend TDHELPER_API BUILDINGS* BuildingFactory(buildings what, float sx, float sy);
 	};
 
+	class TDHELPER_API ORCS :public PROTON
+	{
+	private:
+		orcs _type{ orcs::warrior1 };
 
+		int frame{ 0 };
+		int max_frames{ 0 };
+		int frame_delay{ 0 };
+
+		float move_sx{ 0 };
+		float move_sy{ 0 };
+		float move_ex{ 0 };
+		float move_ey{ 0 };
+		float slope{ 0 };
+		float intercept{ 0 };
+
+		bool hor_dir = false;
+		bool ver_dir = false;
+
+		float speed{ 0 };
+
+		int attack_delay{ 0 };
+		int strenght{ 0 };
+
+		ORCS(orcs _what, float _sx, float _sy);
+
+	public:
+		dirs dir{ dirs::stop };
+		int lifes{ 0 };
+
+		void Release();
+		void SetPathInfo(float _ex, float _ey);
+
+		orcs GetType()const;
+		int GetFrame();
+		int Attack();
+
+		bool Move(float gear);
+
+		friend TDHELPER_API ORCS* OrcFactory(orcs what, float sx, float sy);
+	};
 
 	//FUNCTIONS *****************************************************
 
@@ -511,4 +551,5 @@ namespace dll
 
 	TDHELPER_API BUILDINGS* BuildingFactory(buildings what, float sx, float sy);
 
+	TDHELPER_API ORCS* OrcFactory(orcs what, float sx, float sy);
 }
