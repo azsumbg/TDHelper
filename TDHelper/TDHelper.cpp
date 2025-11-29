@@ -215,19 +215,19 @@ dll::SHOTS::SHOTS(shots _what, float _where_x, float _where_y,
 			if (move_sx > move_ex)dir = dirs::down_left;
 			else dir = dirs::down_right;
 		}
-		strenght = 1.0f + _shot_modifier;
+		strenght = 1 + _shot_modifier;
 		speed = 5.0f + _shot_modifier;
 		break;
 
 	case shots::cannonball:
 		new_dims(40.0f, 40.0f);
-		strenght = 5.0f + _shot_modifier;
+		strenght = 5 + _shot_modifier;
 		speed = 3.0f + _shot_modifier;
 		break;
 
 	case shots::spell:
 		new_dims(50.0f, 50.0f);
-		strenght = 8.0f + _shot_modifier;
+		strenght = 8 + _shot_modifier;
 		speed = 4.0f + _shot_modifier;
 		break;
 	}
@@ -546,7 +546,7 @@ int dll::BUILDINGS::get_frame()
 
 	return frame;
 }
-int dll::BUILDINGS::get_range()const
+float dll::BUILDINGS::get_range()const
 {
 	return range;
 }
@@ -569,7 +569,7 @@ dll::ORCS::ORCS(orcs _what, float _sx, float _sy) :PROTON(_sx, _sy)
 	{
 	case orcs::warrior1:
 		new_dims(50.0f, 57.0f);
-		strenght = 10.0f;
+		strenght = 10;
 		speed = 0.8f;
 		lifes = 50;
 		max_frames = 7;
@@ -579,7 +579,7 @@ dll::ORCS::ORCS(orcs _what, float _sx, float _sy) :PROTON(_sx, _sy)
 
 	case orcs::warrior2:
 		new_dims(55.0f, 57.0f);
-		strenght = 12.0f;
+		strenght = 12;
 		speed = 0.7f;
 		lifes = 60;
 		max_frames = 9;
@@ -589,7 +589,7 @@ dll::ORCS::ORCS(orcs _what, float _sx, float _sy) :PROTON(_sx, _sy)
 
 	case orcs::healer:
 		new_dims(45.0f, 42.0f);
-		strenght = 15.0f;
+		strenght = 15;
 		speed = 0.5f;
 		lifes = 40;
 		max_frames = 45;
@@ -599,7 +599,7 @@ dll::ORCS::ORCS(orcs _what, float _sx, float _sy) :PROTON(_sx, _sy)
 
 	case orcs::crusher:
 		new_dims(50.0f, 31.0f);
-		strenght = 18.0f;
+		strenght = 18;
 		speed = 0.6f;
 		lifes = 80;
 		max_frames = 39;
@@ -609,7 +609,7 @@ dll::ORCS::ORCS(orcs _what, float _sx, float _sy) :PROTON(_sx, _sy)
 
 	case orcs::flyer:
 		new_dims(45.0f, 37.0f);
-		strenght = 10.0f;
+		strenght = 10;
 		speed = 1.0f;
 		lifes = 40;
 		max_frames = 33;
@@ -619,7 +619,7 @@ dll::ORCS::ORCS(orcs _what, float _sx, float _sy) :PROTON(_sx, _sy)
 
 	case orcs::champion:
 		new_dims(150.0f, 148.0f);
-		strenght = 100.0f;
+		strenght = 100;
 		speed = 0.3f;
 		lifes = 150;
 		max_frames = 9;
@@ -827,12 +827,12 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 			case up_flag:
 				if (center.x < scr_width / 2)start.x += my_speed;
 				else start.x -= my_speed;
-				set_edges;
+				set_edges();
 				break;
 
 			case down_flag:
 				start.y -= my_speed;
-				set_edges;
+				set_edges();
 				break;
 			}
 
@@ -898,13 +898,13 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 
 			case up_flag:
 				start.y += my_speed;
-				set_edges;
+				set_edges();
 				break;
 
 			case down_flag:
 				if (center.x < scr_width / 2)start.x += my_speed;
 				else start.x -= my_speed;
-				set_edges;
+				set_edges();
 				break;
 			}
 
@@ -983,7 +983,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 			case down_flag:
 				start.x -= my_speed;
 				start.y -= my_speed;
-				set_edges;
+				set_edges();
 				break;
 			}
 
@@ -1059,7 +1059,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 			case down_flag:
 				start.x -= my_speed;
 				start.y -= my_speed;
-				set_edges;
+				set_edges();
 				break;
 			}
 
@@ -1144,7 +1144,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 
 		case down_flag:
 			start.x -= my_speed;
-			set_edges;
+			set_edges();
 			break;
 		}
 
@@ -1227,7 +1227,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 
 		case down_flag:
 			start.x -= my_speed;
-			set_edges;
+			set_edges();
 			break;
 		}
 

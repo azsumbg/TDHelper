@@ -131,7 +131,7 @@ namespace dll
 				next_pos = other->next_pos;
 
 				m_ptr = reinterpret_cast<T*>(calloc(max_size, sizeof(T)));
-				if (!mPtr)throw EXCEPTION(err_pointer);
+				if (!m_ptr)throw EXCEPTION(err_pointer);
 
 				for (size_t i = 0; i < next_pos; ++i)m_ptr[i] = other[i];
 			}
@@ -402,7 +402,7 @@ namespace dll
 		int current_frame{ 0 };
 		int max_frames{ 63 };
 
-		int strenght = 1.0f;
+		int strenght = 1;
 		
 		void SetPathInfo(float _ex, float _ey);
 
@@ -450,7 +450,7 @@ namespace dll
 
 		int attack();
 		int get_frame();
-		int get_range() const;
+		float get_range() const;
 
 		void Release();
 
@@ -529,7 +529,7 @@ namespace dll
 			{
 				sorted = true;
 
-				for (size_t count = 0; count < Mesh.size() - 1; ++count)
+				for (size_t i = 0; i < Mesh.size() - 1; ++i)
 				{
 					if (Mesh[i] > Mesh[i + 1])
 					{
@@ -547,7 +547,7 @@ namespace dll
 			{
 				sorted = true;
 
-				for (size_t count = 0; count < Mesh.size() - 1; ++count)
+				for (size_t i = 0; i < Mesh.size() - 1; ++i)
 				{
 					if (Mesh[i] < Mesh[i + 1])
 					{
