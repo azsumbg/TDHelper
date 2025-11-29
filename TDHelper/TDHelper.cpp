@@ -625,6 +625,8 @@ dll::ORCS::ORCS(orcs _what, float _sx, float _sy) :PROTON(_sx, _sy)
 		frame_delay = 7;
 		break;
 	}
+
+	max_lifes = lifes;
 }
 
 void dll::ORCS::Release()
@@ -739,9 +741,483 @@ int dll::ORCS::Attack()
 	return 0;
 }
 
-bool dll::ORCS::Move(float gear)
+void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 {
 	float my_speed = speed * gear;
+
+	unsigned char move_flag{ no_flag };
+
+	FRECT dummy{ start.x,end.x,start.y,end.y };
+	
+	if (ver_dir)
+	{
+		if (move_ey < move_sy)
+		{
+			dummy.up -= my_speed;
+			dummy.down -= my_speed;
+
+			if (dummy.up < sky)move_flag |= up_flag;
+
+			for (size_t i = 0; i < obstacles.size(); ++i)
+			{
+				FRECT current_obstacle{ obstacles[i].start.x,obstacles[i].end.y, obstacles[i].start.y,obstacles[i].end.y };
+
+				if (Intersect(dummy, current_obstacle))
+				{
+					if (dummy.up <= current_obstacle.down)move_flag |= up_flag;
+					if (dummy.down >= current_obstacle.up)move_flag |= down_flag;
+					if (dummy.left <= current_obstacle.right)move_flag |= left_flag;
+					if (dummy.right >= current_obstacle.left)move_flag |= right_flag;
+					break;
+				}
+			}
+
+			switch (move_flag)
+			{
+			case no_flag:
+				start.y -= my_speed;
+				set_edges();
+				break;
+
+			case up_right_flag:
+				start.x -= my_speed;
+				set_edges();
+				break;
+
+			case right_flag:
+				start.y -= my_speed;
+				set_edges();
+				break;
+
+			case down_right_flag:
+				start.x -= my_speed;
+				set_edges();
+				break;
+
+			case up_left_flag:
+				start.x += my_speed;
+				set_edges();
+				break;
+
+			case left_flag:
+				start.y -= my_speed;
+				set_edges();
+				break;
+
+			case down_left_flag:
+				start.x += my_speed;
+				set_edges();
+				break;
+
+			case up_flag:
+				if (center.x < scr_width / 2)start.x += my_speed;
+				else start.x -= my_speed;
+				set_edges;
+				break;
+
+			case down_flag:
+				start.y -= my_speed;
+				set_edges;
+				break;
+			}
+
+			return;
+		}
+		else
+		{
+			dummy.up += my_speed;
+			dummy.down += my_speed;
+
+			if (dummy.down > ground)move_flag |= down_flag;
+
+			for (size_t i = 0; i < obstacles.size(); ++i)
+			{
+				FRECT current_obstacle{ obstacles[i].start.x,obstacles[i].end.y, obstacles[i].start.y,obstacles[i].end.y };
+
+				if (Intersect(dummy, current_obstacle))
+				{
+					if (dummy.up <= current_obstacle.down)move_flag |= up_flag;
+					if (dummy.down >= current_obstacle.up)move_flag |= down_flag;
+					if (dummy.left <= current_obstacle.right)move_flag |= left_flag;
+					if (dummy.right >= current_obstacle.left)move_flag |= right_flag;
+					break;
+				}
+			}
+
+			switch (move_flag)
+			{
+			case no_flag:
+				start.y += my_speed;
+				set_edges();
+				break;
+
+			case up_right_flag:
+				start.x -= my_speed;
+				set_edges();
+				break;
+
+			case right_flag:
+				start.y += my_speed;
+				set_edges();
+				break;
+
+			case down_right_flag:
+				start.x -= my_speed;
+				set_edges();
+				break;
+
+			case up_left_flag:
+				start.x += my_speed;
+				set_edges();
+				break;
+
+			case left_flag:
+				start.y += my_speed;
+				set_edges();
+				break;
+
+			case down_left_flag:
+				start.x += my_speed;
+				set_edges();
+				break;
+
+			case up_flag:
+				start.y += my_speed;
+				set_edges;
+				break;
+
+			case down_flag:
+				if (center.x < scr_width / 2)start.x += my_speed;
+				else start.x -= my_speed;
+				set_edges;
+				break;
+			}
+
+			return;
+		}
+	}
+	if (hor_dir)
+	{
+		if (move_ex < move_sx)
+		{
+			dummy.left -= my_speed;
+			dummy.right -= my_speed;
+
+			if (dummy.right < 0)move_flag |= right_flag;
+
+			for (size_t i = 0; i < obstacles.size(); ++i)
+			{
+				FRECT current_obstacle{ obstacles[i].start.x,obstacles[i].end.y, obstacles[i].start.y,obstacles[i].end.y };
+
+				if (Intersect(dummy, current_obstacle))
+				{
+					if (dummy.up <= current_obstacle.down)move_flag |= up_flag;
+					if (dummy.down >= current_obstacle.up)move_flag |= down_flag;
+					if (dummy.left <= current_obstacle.right)move_flag |= left_flag;
+					if (dummy.right >= current_obstacle.left)move_flag |= right_flag;
+					break;
+				}
+			}
+
+			switch (move_flag)
+			{
+			case no_flag:
+				start.x -= my_speed;
+				set_edges();
+				break;
+
+			case up_right_flag:
+				start.y += my_speed;
+				start.x -= my_speed;
+				set_edges();
+				break;
+
+			case right_flag:
+				start.x -= my_speed;
+				set_edges();
+				break;
+
+			case down_right_flag:
+				start.y -= my_speed;
+				start.x -= my_speed;
+				set_edges();
+				break;
+
+			case up_left_flag:
+				start.y += my_speed;
+				set_edges();
+				break;
+
+			case left_flag:
+				if (center.y < scr_height / 2)start.y += my_speed;
+				else start.y -= my_speed;
+				set_edges();
+				break;
+
+			case down_left_flag:
+				start.y -= my_speed;
+				set_edges();
+				break;
+
+			case up_flag:
+				start.x -= my_speed;
+				start.y += my_speed;
+				set_edges();
+				break;
+
+			case down_flag:
+				start.x -= my_speed;
+				start.y -= my_speed;
+				set_edges;
+				break;
+			}
+
+			return;
+		}
+		else
+		{
+			dummy.left += my_speed;
+			dummy.right += my_speed;
+
+			if (dummy.left > scr_width)move_flag |= left_flag;
+
+			for (size_t i = 0; i < obstacles.size(); ++i)
+			{
+				FRECT current_obstacle{ obstacles[i].start.x,obstacles[i].end.y, obstacles[i].start.y,obstacles[i].end.y };
+
+				if (Intersect(dummy, current_obstacle))
+				{
+					if (dummy.up <= current_obstacle.down)move_flag |= up_flag;
+					if (dummy.down >= current_obstacle.up)move_flag |= down_flag;
+					if (dummy.left <= current_obstacle.right)move_flag |= left_flag;
+					if (dummy.right >= current_obstacle.left)move_flag |= right_flag;
+					break;
+				}
+			}
+
+			switch (move_flag)
+			{
+			case no_flag:
+				start.x += my_speed;
+				set_edges();
+				break;
+
+			case up_right_flag:
+				start.y += my_speed;
+				set_edges();
+				break;
+
+			case right_flag:
+				if (center.y < scr_height / 2)start.y += my_speed;
+				else start.y -= my_speed;
+				set_edges();
+				break;
+
+			case down_right_flag:
+				start.y -= my_speed;
+				set_edges();
+				break;
+
+			case up_left_flag:
+				start.y += my_speed;
+				start.x += my_speed;
+				set_edges();
+				break;
+
+			case left_flag:
+				start.x += my_speed;
+				set_edges();
+				break;
+
+			case down_left_flag:
+				start.y -= my_speed;
+				start.x += my_speed;
+				set_edges();
+				break;
+
+			case up_flag:
+				start.x -= my_speed;
+				start.y += my_speed;
+				set_edges();
+				break;
+
+			case down_flag:
+				start.x -= my_speed;
+				start.y -= my_speed;
+				set_edges;
+				break;
+			}
+
+			return;
+		}
+	}
+
+	if (move_ex < move_sx)
+	{
+		dummy.left -= my_speed;
+		dummy.right -= my_speed;
+		dummy.up = dummy.left * slope + intercept;
+		dummy.down = dummy.up + _height;
+
+		if (dummy.right < 0)move_flag |= right_flag;
+		if (dummy.left > scr_width)move_flag |= left_flag;
+		if (dummy.down < sky)move_flag |= up_flag;
+		if (dummy.up > ground)move_flag |= down_flag;
+
+		for (size_t i = 0; i < obstacles.size(); ++i)
+		{
+			FRECT current_obstacle{ obstacles[i].start.x,obstacles[i].end.y, obstacles[i].start.y,obstacles[i].end.y };
+
+			if (Intersect(dummy, current_obstacle))
+			{
+				if (dummy.up <= current_obstacle.down)move_flag |= up_flag;
+				if (dummy.down >= current_obstacle.up)move_flag |= down_flag;
+				if (dummy.left <= current_obstacle.right)move_flag |= left_flag;
+				if (dummy.right >= current_obstacle.left)move_flag |= right_flag;
+				break;
+			}
+		}
+
+		switch (move_flag)
+		{
+		case no_flag:
+			start.x -= my_speed;
+			start.y = start.x * slope + intercept;
+			set_edges();
+			break;
+
+		case up_right_flag:
+			start.y += my_speed;
+			start.x -= my_speed;
+			set_edges();
+			break;
+
+		case right_flag:
+			start.x -= my_speed;
+			start.y = start.x * slope + intercept;
+			set_edges();
+			break;
+
+		case down_right_flag:
+			start.y -= my_speed;
+			start.x -= my_speed;
+			set_edges();
+			break;
+
+		case up_left_flag:
+			start.x += my_speed;
+			start.y += my_speed;
+			set_edges();
+			break;
+
+		case left_flag:
+			start.x += my_speed;
+			start.y = start.x * slope + intercept;
+			set_edges();
+			break;
+
+		case down_left_flag:
+			start.x += my_speed;
+			start.y -= my_speed;
+			set_edges();
+			break;
+
+		case up_flag:
+			start.x -= my_speed;
+			set_edges();
+			break;
+
+		case down_flag:
+			start.x -= my_speed;
+			set_edges;
+			break;
+		}
+
+		return;
+	}
+	else
+	{
+		dummy.left += my_speed;
+		dummy.right += my_speed;
+		dummy.up = dummy.left * slope + intercept;
+		dummy.down = dummy.up + _height;
+
+		if (dummy.right < 0)move_flag |= right_flag;
+		if (dummy.left > scr_width)move_flag |= left_flag;
+		if (dummy.down < sky)move_flag |= up_flag;
+		if (dummy.up > ground)move_flag |= down_flag;
+
+		for (size_t i = 0; i < obstacles.size(); ++i)
+		{
+			FRECT current_obstacle{ obstacles[i].start.x,obstacles[i].end.y, obstacles[i].start.y,obstacles[i].end.y };
+
+			if (Intersect(dummy, current_obstacle))
+			{
+				if (dummy.up <= current_obstacle.down)move_flag |= up_flag;
+				if (dummy.down >= current_obstacle.up)move_flag |= down_flag;
+				if (dummy.left <= current_obstacle.right)move_flag |= left_flag;
+				if (dummy.right >= current_obstacle.left)move_flag |= right_flag;
+				break;
+			}
+		}
+
+		switch (move_flag)
+		{
+		case no_flag:
+			start.x += my_speed;
+			start.y = start.x * slope + intercept;
+			set_edges();
+			break;
+
+		case up_right_flag:
+			start.y += my_speed;
+			start.x -= my_speed;
+			set_edges();
+			break;
+
+		case right_flag:
+			start.x -= my_speed;
+			start.y = start.x * slope + intercept;
+			set_edges();
+			break;
+
+		case down_right_flag:
+			start.y -= my_speed;
+			start.x -= my_speed;
+			set_edges();
+			break;
+
+		case up_left_flag:
+			start.x += my_speed;
+			start.y += my_speed;
+			set_edges();
+			break;
+
+		case left_flag:
+			start.x += my_speed;
+			start.y = start.x * slope + intercept;
+			set_edges();
+			break;
+
+		case down_left_flag:
+			start.x += my_speed;
+			start.y -= my_speed;
+			set_edges();
+			break;
+
+		case up_flag:
+			start.x -= my_speed;
+			set_edges();
+			break;
+
+		case down_flag:
+			start.x -= my_speed;
+			set_edges;
+			break;
+		}
+
+		return;
+	}
 }
 
 
@@ -762,6 +1238,14 @@ bool dll::Intersect(FPOINT first_center, FPOINT second_center, float first_radiu
 {
 	if (abs(second_center.x - first_center.x) <= first_radius_x + second_radius_x
 		&& abs(second_center.y - first_center.y) <= first_radius_y + second_radius_y)return true;
+	return false;
+}
+
+bool dll::Intersect(FRECT firstR, FRECT secondR)
+{
+	if (!(firstR.left >= secondR.right || firstR.right <= secondR.left
+		|| firstR.up >= secondR.down || firstR.down <= secondR.up))return true;
+
 	return false;
 }
 
@@ -822,7 +1306,9 @@ TDHELPER_API dll::BUILDINGS* dll::BuildingFactory(buildings what, float sx, floa
 
 TDHELPER_API dll::ORCS* dll::OrcFactory(orcs what, float sx, float sy)
 {
+	ORCS* ret{ nullptr };
 
+	ret = new ORCS(what, sx, sy);
 
-
+	return ret;
 }

@@ -19,6 +19,17 @@ constexpr int err_index{ 1112 };
 constexpr int err_data{ 1113 };
 constexpr int err_wrong_copy{ 1114 };
 
+constexpr unsigned char no_flag{ 0 };
+constexpr unsigned char left_flag{ 0b00000001 };
+constexpr unsigned char right_flag{ 0b00000010 };
+constexpr unsigned char up_flag{ 0b00000100 };
+constexpr unsigned char down_flag{ 0b00001000 };
+
+constexpr unsigned char up_left_flag{ 0b00000101 };
+constexpr unsigned char up_right_flag{ 0b00000110 };
+constexpr unsigned char down_left_flag{ 0b00001001 };
+constexpr unsigned char down_right_flag{ 0b00001010 };
+
 enum class dirs { up = 0, right = 1, left = 2, down = 3, stop = 4, up_left = 5, up_right = 6, down_left = 7, down_right = 8 };
 
 enum class orcs { warrior1 = 0, warrior2 = 1, crusher = 2, healer = 3, flyer = 4, champion = 5 };
@@ -469,6 +480,8 @@ namespace dll
 		int attack_delay{ 0 };
 		int strenght{ 0 };
 
+		int max_lifes{ 0 };
+
 		ORCS(orcs _what, float _sx, float _sy);
 
 	public:
@@ -482,18 +495,20 @@ namespace dll
 		int GetFrame();
 		int Attack();
 
-		bool Move(float gear);
+		void Move(BAG<ASSETS>& obstacles, float gear);
 
 		friend TDHELPER_API ORCS* OrcFactory(orcs what, float sx, float sy);
 	};
 
 	//FUNCTIONS *****************************************************
 
-	float Distance(FPOINT first_center, FPOINT second_center);
+	TDHELPER_API float Distance(FPOINT first_center, FPOINT second_center);
 
-	bool Intersect(FPOINT first_center, FPOINT second_center, float first_radius_x, float second_radius_x,
+	TDHELPER_API bool Intersect(FPOINT first_center, FPOINT second_center, float first_radius_x, float second_radius_x,
 		float first_radius_y, float second_radius_y);
 
+	TDHELPER_API bool Intersect(FRECT firstR, FRECT secondR);
+	
 	template<primes T>bool Sort(BAG<T>& Mesh, bool ascending = true)
 	{
 		if (Mesh.empty() || Mesh.size() < 2)return false;
@@ -540,7 +555,7 @@ namespace dll
 		return true;
 	}
 
-	bool TDHELPER_API Sort(BAG<FPOINT>& Mesh, FPOINT ref_point);
+	TDHELPER_API bool Sort(BAG<FPOINT>& Mesh, FPOINT ref_point);
 
 
 
