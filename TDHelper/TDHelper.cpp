@@ -559,6 +559,8 @@ void dll::BUILDINGS::Release()
 
 // ORCS CLASS *************************
 
+unsigned int dll::ORCS::_counter = 0;
+
 dll::ORCS::ORCS(orcs _what, float _sx, float _sy) :PROTON(_sx, _sy)
 {
 	_type = _what;
@@ -627,6 +629,8 @@ dll::ORCS::ORCS(orcs _what, float _sx, float _sy) :PROTON(_sx, _sy)
 	}
 
 	max_lifes = lifes;
+	_my_number = _counter;
+	++_counter;
 }
 
 void dll::ORCS::Release()
@@ -662,6 +666,14 @@ void dll::ORCS::SetPathInfo(float _ex, float _ey)
 orcs dll::ORCS::GetType()const
 {
 	return _type;
+}
+int dll::ORCS::GetNumber()const
+{
+	return _my_number;
+}
+int dll::ORCS::GetMaxLifes() const
+{
+	return max_lifes;
 }
 int dll::ORCS::GetFrame()
 {
@@ -749,6 +761,9 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 
 	FRECT dummy{ start.x,end.x,start.y,end.y };
 	
+	if (move_ex >= move_sx)dir = dirs::right;
+	else dir = dirs::left;
+
 	if (ver_dir)
 	{
 		if (move_ey < move_sy)
@@ -1220,7 +1235,6 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 	}
 }
 
-
 ////////////////////////////////////////
 
 // FUNCTION DEFINITIONS *********************************
@@ -1276,6 +1290,51 @@ bool dll::Sort(BAG<FPOINT>& Mesh, FPOINT ref_point)
 	return true;
 }
 
+states dll::OrcAI(ORCS& myself, BAG<FPOINT>& buildings, BAG<ORCS>& orcs)
+{
+	states current = myself.state;
+
+	if (current == states::attack || current == states::heal)return current;
+
+	if (myself.GetType() == orcs::healer)
+	{
+		if (!orcs.empty())
+		{
+			for (size_t i = 0; i < orcs.size(); ++i)
+			{
+				if (orcs[i].GetType() != orcs::healer && orcs[i].lifes < orcs[i].GetMaxLifes())
+				{
+					myself.SetPathInfo(orcs[i].center.x, orcs[i].center.y);
+					current = states::heal;
+					break;
+				}
+			}
+		
+			if (current != states::heal && !buildings.empty())
+			{
+				Sort(buildings, FPOINT{ myself.center.x,myself.center.y });
+				myself.SetPathInfo(buildings[0].x, buildings[0].y);
+			}
+		}
+	}
+	else
+	{
+		if (!buildings.empty())
+		{
+			Sort(buildings, FPOINT{ myself.center.x,myself.center.y });
+			myself.SetPathInfo(buildings[0].x, buildings[0].y);
+		}
+	}
+
+	return current;
+}
+
+FPOINT dll::TowerAI(BUILDINGS* myself, BAG<FPOINT>& orcs)
+{
+	Sort(orcs, FPOINT(myself->center.x, myself->center.y));
+
+	return orcs[0];
+}
 
 TDHELPER_API dll::ASSETS* dll::AssetFactory(assets what_type, float start_x, float start_y)
 {

@@ -31,6 +31,7 @@ constexpr unsigned char down_left_flag{ 0b00001001 };
 constexpr unsigned char down_right_flag{ 0b00001010 };
 
 enum class dirs { up = 0, right = 1, left = 2, down = 3, stop = 4, up_left = 5, up_right = 6, down_left = 7, down_right = 8 };
+enum class states { idle = 0, attack = 1, heal = 2 };
 
 enum class orcs { warrior1 = 0, warrior2 = 1, crusher = 2, healer = 3, flyer = 4, champion = 5 };
 enum class buildings {
@@ -461,6 +462,9 @@ namespace dll
 	private:
 		orcs _type{ orcs::warrior1 };
 
+		static unsigned int _counter;
+		int _my_number{ 0 };
+
 		int frame{ 0 };
 		int max_frames{ 0 };
 		int frame_delay{ 0 };
@@ -486,12 +490,16 @@ namespace dll
 
 	public:
 		dirs dir{ dirs::stop };
+		states state = states::idle;
+		
 		int lifes{ 0 };
 
 		void Release();
 		void SetPathInfo(float _ex, float _ey);
 
 		orcs GetType()const;
+		int GetNumber() const;
+		int GetMaxLifes() const;
 		int GetFrame();
 		int Attack();
 
@@ -557,7 +565,9 @@ namespace dll
 
 	TDHELPER_API bool Sort(BAG<FPOINT>& Mesh, FPOINT ref_point);
 
+	TDHELPER_API states OrcAI(ORCS& myself, BAG<FPOINT>& buildings, BAG<ORCS>& orcs);
 
+	TDHELPER_API FPOINT TowerAI(BUILDINGS* myself, BAG<FPOINT>& orcs);
 
 	TDHELPER_API ASSETS* AssetFactory(assets what_type, float start_x, float start_y);
 	
