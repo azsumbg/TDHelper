@@ -755,7 +755,7 @@ int dll::ORCS::Attack()
 
 void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 {
-	float my_speed = speed * gear;
+	float my_speed = speed + gear / 10.0f;
 
 	unsigned char move_flag{ no_flag };
 
@@ -771,7 +771,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 			dummy.up -= my_speed;
 			dummy.down -= my_speed;
 
-			if (dummy.up < sky)move_flag |= up_flag;
+			if (dummy.up < sky - 100.0f)move_flag |= up_flag;
 
 			for (size_t i = 0; i < obstacles.size(); ++i)
 			{
@@ -795,39 +795,33 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 				break;
 
 			case up_right_flag:
-				start.x -= my_speed;
-				set_edges();
+				SetPathInfo(start.x - 100.0f, ground);
 				break;
 
 			case right_flag:
-				start.y -= my_speed;
-				set_edges();
+				SetPathInfo(start.x - 100.0f, start.y);
 				break;
 
 			case down_right_flag:
-				start.x -= my_speed;
-				set_edges();
+				SetPathInfo(start.x - 100.0f, sky);
 				break;
 
 			case up_left_flag:
-				start.x += my_speed;
-				set_edges();
+				SetPathInfo(start.x + 100.0f, ground);
 				break;
 
 			case left_flag:
-				start.y -= my_speed;
-				set_edges();
+				if (center.y < scr_height / 2)SetPathInfo(start.x + 100.0f, ground);
+				else SetPathInfo(start.x + 100.0f, sky);
 				break;
 
 			case down_left_flag:
-				start.x += my_speed;
-				set_edges();
+				SetPathInfo(start.x + 100.0f, sky);
 				break;
 
 			case up_flag:
-				if (center.x < scr_width / 2)start.x += my_speed;
-				else start.x -= my_speed;
-				set_edges();
+				if (center.x < scr_width / 2)SetPathInfo(start.x + 100.0f, ground);
+				else SetPathInfo(start.x - 100.0f, ground);
 				break;
 
 			case down_flag:
@@ -843,7 +837,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 			dummy.up += my_speed;
 			dummy.down += my_speed;
 
-			if (dummy.down > ground)move_flag |= down_flag;
+			if (dummy.down > ground + 100.0f)move_flag |= down_flag;
 
 			for (size_t i = 0; i < obstacles.size(); ++i)
 			{
@@ -867,33 +861,28 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 				break;
 
 			case up_right_flag:
-				start.x -= my_speed;
-				set_edges();
+				SetPathInfo(start.x - 100.0f, ground);
 				break;
 
 			case right_flag:
-				start.y += my_speed;
-				set_edges();
+				SetPathInfo(start.x - 100.0f, start.y);
 				break;
 
 			case down_right_flag:
-				start.x -= my_speed;
-				set_edges();
+				SetPathInfo(start.x - 100.0f, sky);
 				break;
 
 			case up_left_flag:
-				start.x += my_speed;
-				set_edges();
+				SetPathInfo(start.x + 100.0f, ground);
 				break;
 
 			case left_flag:
-				start.y += my_speed;
-				set_edges();
+				if (center.y < scr_height / 2)SetPathInfo(start.x + 100.0f, ground);
+				else SetPathInfo(start.x + 100.0f, sky);
 				break;
 
 			case down_left_flag:
-				start.x += my_speed;
-				set_edges();
+				SetPathInfo(start.x + 100.0f, sky);
 				break;
 
 			case up_flag:
@@ -918,7 +907,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 			dummy.left -= my_speed;
 			dummy.right -= my_speed;
 
-			if (dummy.right < 0)move_flag |= right_flag;
+			if (dummy.right < -150.0f)move_flag |= right_flag;
 
 			for (size_t i = 0; i < obstacles.size(); ++i)
 			{
@@ -942,9 +931,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 				break;
 
 			case up_right_flag:
-				start.y += my_speed;
-				start.x -= my_speed;
-				set_edges();
+				SetPathInfo(start.x - 100.0f, ground);
 				break;
 
 			case right_flag:
@@ -953,35 +940,28 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 				break;
 
 			case down_right_flag:
-				start.y -= my_speed;
-				start.x -= my_speed;
-				set_edges();
+				SetPathInfo(start.x - 100.0f, sky);
 				break;
 
 			case up_left_flag:
-				start.y += my_speed;
-				set_edges();
+				SetPathInfo(start.x + 100.0f, ground);
 				break;
 
 			case left_flag:
-				if (center.y < scr_height / 2)start.y += my_speed;
-				else start.y -= my_speed;
-				set_edges();
+				if (center.y < scr_height / 2)SetPathInfo(start.x + 100.0f, ground);
+				else SetPathInfo(start.x + 100.0f, sky);
 				break;
 
 			case down_left_flag:
-				start.y -= my_speed;
-				set_edges();
+				SetPathInfo(start.x + 100.0f, sky);
 				break;
 
 			case up_flag:
-				start.x -= my_speed;
-				start.y += my_speed;
-				set_edges();
+				if (center.x < scr_width / 2)SetPathInfo(start.x + 100.0f, ground);
+				else SetPathInfo(start.x - 100.0f, ground);
 				break;
 
 			case down_flag:
-				start.x -= my_speed;
 				start.y -= my_speed;
 				set_edges();
 				break;
@@ -994,7 +974,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 			dummy.left += my_speed;
 			dummy.right += my_speed;
 
-			if (dummy.left > scr_width)move_flag |= left_flag;
+			if (dummy.left > scr_width + 150.0f)move_flag |= left_flag;
 
 			for (size_t i = 0; i < obstacles.size(); ++i)
 			{
@@ -1018,25 +998,20 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 				break;
 
 			case up_right_flag:
-				start.y += my_speed;
-				set_edges();
+				SetPathInfo(start.x - 100.0f, ground);
 				break;
 
 			case right_flag:
-				if (center.y < scr_height / 2)start.y += my_speed;
-				else start.y -= my_speed;
+				start.x -= my_speed;
 				set_edges();
 				break;
 
 			case down_right_flag:
-				start.y -= my_speed;
-				set_edges();
+				SetPathInfo(start.x - 100.0f, sky);
 				break;
 
 			case up_left_flag:
-				start.y += my_speed;
-				start.x += my_speed;
-				set_edges();
+				SetPathInfo(start.x + 100.0f, ground);
 				break;
 
 			case left_flag:
@@ -1045,19 +1020,15 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 				break;
 
 			case down_left_flag:
-				start.y -= my_speed;
-				start.x += my_speed;
-				set_edges();
+				SetPathInfo(start.x + 100.0f, sky);
 				break;
 
 			case up_flag:
-				start.x -= my_speed;
-				start.y += my_speed;
-				set_edges();
+				if (center.x < scr_width / 2)SetPathInfo(start.x + 100.0f, ground);
+				else SetPathInfo(start.x - 100.0f, ground);
 				break;
 
 			case down_flag:
-				start.x -= my_speed;
 				start.y -= my_speed;
 				set_edges();
 				break;
@@ -1074,10 +1045,10 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 		dummy.up = dummy.left * slope + intercept;
 		dummy.down = dummy.up + _height;
 
-		if (dummy.right < 0)move_flag |= right_flag;
-		if (dummy.left > scr_width)move_flag |= left_flag;
-		if (dummy.down < sky)move_flag |= up_flag;
-		if (dummy.up > ground)move_flag |= down_flag;
+		if (dummy.right < -150.0f)move_flag |= right_flag;
+		if (dummy.left > scr_width + 150.0f)move_flag |= left_flag;
+		if (dummy.down < 0)move_flag |= up_flag;
+		if (dummy.up > ground + 100.0f)move_flag |= down_flag;
 
 		for (size_t i = 0; i < obstacles.size(); ++i)
 		{
@@ -1102,9 +1073,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 			break;
 
 		case up_right_flag:
-			start.y += my_speed;
-			start.x -= my_speed;
-			set_edges();
+			SetPathInfo(start.x - 100.0f, ground);
 			break;
 
 		case right_flag:
@@ -1114,37 +1083,30 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 			break;
 
 		case down_right_flag:
-			start.y -= my_speed;
-			start.x -= my_speed;
-			set_edges();
+			SetPathInfo(start.x - 100.0f, sky);
 			break;
 
 		case up_left_flag:
-			start.x += my_speed;
-			start.y += my_speed;
-			set_edges();
+			SetPathInfo(start.x + 100.0f, ground);
 			break;
 
 		case left_flag:
-			start.x += my_speed;
-			start.y = start.x * slope + intercept;
-			set_edges();
+			if (center.y < scr_height / 2)SetPathInfo(start.x + 100.0f, ground);
+			else SetPathInfo(start.x + 100.0f, sky);
 			break;
 
 		case down_left_flag:
-			start.x += my_speed;
-			start.y -= my_speed;
-			set_edges();
+			SetPathInfo(start.x + 100.0f, sky);
 			break;
 
 		case up_flag:
-			start.x -= my_speed;
-			set_edges();
+			if (center.x < scr_width / 2)SetPathInfo(start.x + 100.0f, ground);
+			else SetPathInfo(start.x - 100.0f, ground);
 			break;
 
 		case down_flag:
-			start.x -= my_speed;
-			set_edges();
+			if (center.x < scr_width / 2)SetPathInfo(start.x + 100.0f, sky);
+			else SetPathInfo(start.x - 100.0f, sky);
 			break;
 		}
 
@@ -1157,10 +1119,10 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 		dummy.up = dummy.left * slope + intercept;
 		dummy.down = dummy.up + _height;
 
-		if (dummy.right < 0)move_flag |= right_flag;
-		if (dummy.left > scr_width)move_flag |= left_flag;
-		if (dummy.down < sky)move_flag |= up_flag;
-		if (dummy.up > ground)move_flag |= down_flag;
+		if (dummy.right < -150.0f)move_flag |= right_flag;
+		if (dummy.left > scr_width + 150.0f)move_flag |= left_flag;
+		if (dummy.down < 0)move_flag |= up_flag;
+		if (dummy.up > ground + 100.0f)move_flag |= down_flag;
 
 		for (size_t i = 0; i < obstacles.size(); ++i)
 		{
@@ -1185,27 +1147,20 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 			break;
 
 		case up_right_flag:
-			start.y += my_speed;
-			start.x -= my_speed;
-			set_edges();
+			SetPathInfo(start.x - 100.0f, ground);
 			break;
 
 		case right_flag:
-			start.x -= my_speed;
-			start.y = start.x * slope + intercept;
-			set_edges();
+			if (center.y < scr_height / 2)SetPathInfo(start.x - 100.0f, ground);
+			else SetPathInfo(start.x - 100.0f, sky);
 			break;
 
 		case down_right_flag:
-			start.y -= my_speed;
-			start.x -= my_speed;
-			set_edges();
+			SetPathInfo(start.x - 100.0f, sky);
 			break;
 
 		case up_left_flag:
-			start.x += my_speed;
-			start.y += my_speed;
-			set_edges();
+			SetPathInfo(start.x + 100.0f, ground);
 			break;
 
 		case left_flag:
@@ -1215,19 +1170,17 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 			break;
 
 		case down_left_flag:
-			start.x += my_speed;
-			start.y -= my_speed;
-			set_edges();
+			SetPathInfo(start.x + 100.0f, sky);
 			break;
 
 		case up_flag:
-			start.x -= my_speed;
-			set_edges();
+			if (center.x < scr_width / 2)SetPathInfo(start.x + 100.0f, ground);
+			else SetPathInfo(start.x - 100.0f, ground);
 			break;
 
 		case down_flag:
-			start.x -= my_speed;
-			set_edges();
+			if (center.x < scr_width / 2)SetPathInfo(start.x + 100.0f, sky);
+			else SetPathInfo(start.x - 100.0f, sky);
 			break;
 		}
 
@@ -1323,6 +1276,7 @@ states dll::OrcAI(ORCS& myself, BAG<FPOINT>& buildings, BAG<ORCS>& orcs)
 		{
 			Sort(buildings, FPOINT{ myself.center.x,myself.center.y });
 			myself.SetPathInfo(buildings[0].x, buildings[0].y);
+			current = states::idle;
 		}
 	}
 
