@@ -775,7 +775,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 
 			for (size_t i = 0; i < obstacles.size(); ++i)
 			{
-				FRECT current_obstacle{ obstacles[i].start.x,obstacles[i].end.y, obstacles[i].start.y,obstacles[i].end.y };
+				FRECT current_obstacle{ obstacles[i].start.x,obstacles[i].end.x, obstacles[i].start.y,obstacles[i].end.y };
 
 				if (Intersect(dummy, current_obstacle))
 				{
@@ -847,7 +847,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 
 			for (size_t i = 0; i < obstacles.size(); ++i)
 			{
-				FRECT current_obstacle{ obstacles[i].start.x,obstacles[i].end.y, obstacles[i].start.y,obstacles[i].end.y };
+				FRECT current_obstacle{ obstacles[i].start.x,obstacles[i].end.x, obstacles[i].start.y,obstacles[i].end.y };
 
 				if (Intersect(dummy, current_obstacle))
 				{
@@ -921,7 +921,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 
 			for (size_t i = 0; i < obstacles.size(); ++i)
 			{
-				FRECT current_obstacle{ obstacles[i].start.x,obstacles[i].end.y, obstacles[i].start.y,obstacles[i].end.y };
+				FRECT current_obstacle{ obstacles[i].start.x,obstacles[i].end.x, obstacles[i].start.y,obstacles[i].end.y };
 
 				if (Intersect(dummy, current_obstacle))
 				{
@@ -993,7 +993,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 
 			for (size_t i = 0; i < obstacles.size(); ++i)
 			{
-				FRECT current_obstacle{ obstacles[i].start.x,obstacles[i].end.y, obstacles[i].start.y,obstacles[i].end.y };
+				FRECT current_obstacle{ obstacles[i].start.x,obstacles[i].end.x, obstacles[i].start.y,obstacles[i].end.y };
 
 				if (Intersect(dummy, current_obstacle))
 				{
@@ -1072,7 +1072,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 
 		for (size_t i = 0; i < obstacles.size(); ++i)
 		{
-			FRECT current_obstacle{ obstacles[i].start.x,obstacles[i].end.y, obstacles[i].start.y,obstacles[i].end.y };
+			FRECT current_obstacle{ obstacles[i].start.x,obstacles[i].end.x, obstacles[i].start.y,obstacles[i].end.y };
 
 			if (Intersect(dummy, current_obstacle))
 			{
@@ -1155,7 +1155,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 
 		for (size_t i = 0; i < obstacles.size(); ++i)
 		{
-			FRECT current_obstacle{ obstacles[i].start.x,obstacles[i].end.y, obstacles[i].start.y,obstacles[i].end.y };
+			FRECT current_obstacle{ obstacles[i].start.x,obstacles[i].end.x, obstacles[i].start.y,obstacles[i].end.y };
 
 			if (Intersect(dummy, current_obstacle))
 			{
