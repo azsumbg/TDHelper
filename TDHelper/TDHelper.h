@@ -478,7 +478,7 @@ namespace dll
 
 		bool hor_dir = false;
 		bool ver_dir = false;
-
+		
 		float speed{ 0 };
 
 		int attack_delay{ 0 };
@@ -491,7 +491,8 @@ namespace dll
 	public:
 		dirs dir{ dirs::stop };
 		states state = states::idle;
-		
+		bool bumped = false;
+
 		int lifes{ 0 };
 
 		void Release();
