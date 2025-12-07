@@ -757,195 +757,155 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 {
 	float my_speed = speed + gear / 10.0f;
 
-	unsigned char move_flag{ no_flag };
-
 	FRECT dummy{ start.x,end.x,start.y,end.y };
 	
-	bumped = false;
-
-	if (ver_dir)
+	if (!bumped)
 	{
-		if (move_ey < move_sy)
+		if (ver_dir)
 		{
-			dummy.up -= my_speed;
-			dummy.down -= my_speed;
-
-			if (dummy.up < sky - 100.0f)move_flag |= up_flag;
-
-			for (size_t i = 0; i < obstacles.size(); ++i)
+			if (move_ey < move_sy)
 			{
-				FRECT current_obstacle{ obstacles[i].start.x,obstacles[i].end.x, obstacles[i].start.y,obstacles[i].end.y };
+				dummy.up -= my_speed;
+				dummy.down -= my_speed;
 
-				if (Intersect(dummy, current_obstacle))
+				if (dummy.up < sky - 100.0f)move_flag |= up_flag;
+
+				for (size_t i = 0; i < obstacles.size(); ++i)
 				{
-					if (dummy.up <= current_obstacle.down)move_flag |= up_flag;
-					if (dummy.down >= current_obstacle.up)move_flag |= down_flag;
-					if (dummy.left <= current_obstacle.right)move_flag |= left_flag;
-					if (dummy.right >= current_obstacle.left)move_flag |= right_flag;
+					FRECT current_obstacle{ obstacles[i].start.x,obstacles[i].end.x, obstacles[i].start.y,obstacles[i].end.y };
 
-					bumped = true;
+					if (Intersect(dummy, current_obstacle))
+					{
+						if (dummy.up <= current_obstacle.down)move_flag |= up_flag;
+						if (dummy.down >= current_obstacle.up)move_flag |= down_flag;
+						if (dummy.left <= current_obstacle.right)move_flag |= left_flag;
+						if (dummy.right >= current_obstacle.left)move_flag |= right_flag;
 
-					break;
+						current_obstacle = dummy;
+
+						bumped = true;
+
+						break;
+					}
 				}
-			}
 
-			switch (move_flag)
-			{
-			case no_flag:
-				start.y -= my_speed;
-				set_edges();
-				break;
-
-			case up_right_flag:
-				start.y += my_speed;
-				set_edges();
-				SetPathInfo(0, ground);
-				break;
-
-			case right_flag:
-				start.y -= my_speed;
-				set_edges();
-				break;
-
-			case down_right_flag:
-				start.y -= my_speed;
-				set_edges();
-				break;
-
-			case up_left_flag:
-				start.y += my_speed;
-				set_edges();
-				SetPathInfo(scr_width, ground);
-				break;
-
-			case left_flag:
-				start.y -= my_speed;
-				set_edges();
-				break;
-
-			case down_left_flag:
-				start.y -= my_speed;
-				set_edges();
-				break;
-
-			case up_flag:
-				if (start.x < scr_width / 2)
-				{
-					start.y += my_speed;
-					set_edges();
-					SetPathInfo(scr_width, start.y);
-				}
-				else
-				{
-					start.y += my_speed;
-					set_edges();
-					SetPathInfo(0, start.y);
-				}
-				break;
-
-			case down_flag:
-				start.y -= my_speed;
-				set_edges();
-				break;
-			}
-
-			return;
-		}
-		else
-		{
-			dummy.up += my_speed;
-			dummy.down += my_speed;
-
-			if (dummy.down > ground + 100.0f)move_flag |= down_flag;
-
-			for (size_t i = 0; i < obstacles.size(); ++i)
-			{
-				FRECT current_obstacle{ obstacles[i].start.x,obstacles[i].end.x, obstacles[i].start.y,obstacles[i].end.y };
-
-				if (Intersect(dummy, current_obstacle))
-				{
-					if (dummy.up <= current_obstacle.down)move_flag |= up_flag;
-					if (dummy.down >= current_obstacle.up)move_flag |= down_flag;
-					if (dummy.left <= current_obstacle.right)move_flag |= left_flag;
-					if (dummy.right >= current_obstacle.left)move_flag |= right_flag;
-
-					bumped = true;
-					break;
-				}
-			}
-
-			switch (move_flag)
-			{
-			case no_flag:
-				start.y += my_speed;
-				set_edges();
-				break;
-
-			case up_right_flag:
-				start.y += my_speed;
-				set_edges();
-				break;
-
-			case right_flag:
-				start.y += my_speed;
-				set_edges();
-				break;
-
-			case down_right_flag:
-				start.y -= my_speed;
-				set_edges();
-				SetPathInfo(0, sky);
-				break;
-
-			case up_left_flag:
-				start.y += my_speed;
-				set_edges();
-				break;
-
-			case left_flag:
-				start.y += my_speed;
-				set_edges();
-				break;
-
-			case down_left_flag:
-				start.y -= my_speed;
-				set_edges();
-				SetPathInfo(scr_width, sky);
-				break;
-
-			case up_flag:
-				start.y += my_speed;
-				set_edges();
-				break;
-
-			case down_flag:
-				if (start.x < scr_width / 2)
-				{
-					start.y -= my_speed;
-					set_edges();
-					SetPathInfo(scr_width, start.y);
-				}
-				else
+				if (!bumped)
 				{
 					start.y -= my_speed;
 					set_edges();
 
-					SetPathInfo(0, start.y);
+					return;
 				}
-				break;
 			}
+			else
+			{
+				dummy.up += my_speed;
+				dummy.down += my_speed;
 
-			return;
+				if (dummy.down > ground + 100.0f)move_flag |= down_flag;
+
+				for (size_t i = 0; i < obstacles.size(); ++i)
+				{
+					FRECT current_obstacle{ obstacles[i].start.x,obstacles[i].end.x, obstacles[i].start.y,obstacles[i].end.y };
+
+					if (Intersect(dummy, current_obstacle))
+					{
+						if (dummy.up <= current_obstacle.down)move_flag |= up_flag;
+						if (dummy.down >= current_obstacle.up)move_flag |= down_flag;
+						if (dummy.left <= current_obstacle.right)move_flag |= left_flag;
+						if (dummy.right >= current_obstacle.left)move_flag |= right_flag;
+						current_obstacle = dummy;
+
+						bumped = true;
+						break;
+					}
+				}
+
+				if (!bumped)
+				{
+					start.y += my_speed;
+					set_edges();
+
+					return;
+				}
+			}
 		}
-	}
-	if (hor_dir)
-	{
+		if (hor_dir)
+		{
+			if (move_ex < move_sx)
+			{
+				dummy.left -= my_speed;
+				dummy.right -= my_speed;
+
+				if (dummy.right < -150.0f)move_flag |= right_flag;
+
+				for (size_t i = 0; i < obstacles.size(); ++i)
+				{
+					FRECT current_obstacle{ obstacles[i].start.x,obstacles[i].end.x, obstacles[i].start.y,obstacles[i].end.y };
+
+					if (Intersect(dummy, current_obstacle))
+					{
+						if (dummy.up <= current_obstacle.down)move_flag |= up_flag;
+						if (dummy.down >= current_obstacle.up)move_flag |= down_flag;
+						if (dummy.left <= current_obstacle.right)move_flag |= left_flag;
+						if (dummy.right >= current_obstacle.left)move_flag |= right_flag;
+						bumped = true;
+						break;
+					}
+				}
+
+				if (!bumped)
+				{
+					start.x -= my_speed;
+					set_edges();
+
+					return;
+				}
+			}
+			else
+			{
+				dummy.left += my_speed;
+				dummy.right += my_speed;
+
+				if (dummy.left > scr_width + 150.0f)move_flag |= left_flag;
+
+				for (size_t i = 0; i < obstacles.size(); ++i)
+				{
+					FRECT current_obstacle{ obstacles[i].start.x,obstacles[i].end.x, obstacles[i].start.y,obstacles[i].end.y };
+
+					if (Intersect(dummy, current_obstacle))
+					{
+						if (dummy.up <= current_obstacle.down)move_flag |= up_flag;
+						if (dummy.down >= current_obstacle.up)move_flag |= down_flag;
+						if (dummy.left <= current_obstacle.right)move_flag |= left_flag;
+						if (dummy.right >= current_obstacle.left)move_flag |= right_flag;
+						bumped = true;
+						current_obstacle = dummy;
+						break;
+					}
+				}
+
+				if (!bumped)
+				{
+					start.x += my_speed;
+					set_edges();
+
+					return;
+				}
+			}
+		}
+
 		if (move_ex < move_sx)
 		{
 			dummy.left -= my_speed;
 			dummy.right -= my_speed;
+			dummy.up = dummy.left * slope + intercept;
+			dummy.down = dummy.up + _height;
 
 			if (dummy.right < -150.0f)move_flag |= right_flag;
+			if (dummy.left > scr_width + 150.0f)move_flag |= left_flag;
+			if (dummy.down < 0)move_flag |= up_flag;
+			if (dummy.up > ground + 100.0f)move_flag |= down_flag;
 
 			for (size_t i = 0; i < obstacles.size(); ++i)
 			{
@@ -958,78 +918,31 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 					if (dummy.left <= current_obstacle.right)move_flag |= left_flag;
 					if (dummy.right >= current_obstacle.left)move_flag |= right_flag;
 					bumped = true;
+					current_obstacle = dummy;
 					break;
 				}
 			}
 
-			switch (move_flag)
+			if (!bumped)
 			{
-			case no_flag:
 				start.x -= my_speed;
+				start.y = start.x * slope + intercept;
 				set_edges();
-				break;
 
-			case up_right_flag:
-				start.x -= my_speed;
-				set_edges();
-				break;
-
-			case right_flag:
-				start.x -= my_speed;
-				set_edges();
-				break;
-
-			case down_right_flag:
-				start.x -= my_speed;
-				set_edges();
-				break;
-
-			case up_left_flag:
-				start.x += my_speed;
-				set_edges();
-				SetPathInfo(start.x, ground);
-				break;
-
-			case left_flag:
-				if (center.y < scr_height / 2)
-				{
-					start.x += my_speed;
-					set_edges();
-					SetPathInfo(start.x, sky);
-				}
-				else
-				{
-					start.x += my_speed;
-					set_edges();
-					SetPathInfo(start.x, ground);
-				}
-				break;
-
-			case down_left_flag:
-				start.x += my_speed;
-				set_edges();
-				SetPathInfo(start.x, sky); 
-				break;
-
-			case up_flag:
-				start.x -= my_speed;
-				set_edges();
-				break;
-
-			case down_flag:
-				start.x -= my_speed;
-				set_edges();
-				break;
+				return;
 			}
-
-			return;
 		}
 		else
 		{
 			dummy.left += my_speed;
 			dummy.right += my_speed;
+			dummy.up = dummy.left * slope + intercept;
+			dummy.down = dummy.up + _height;
 
+			if (dummy.right < -150.0f)move_flag |= right_flag;
 			if (dummy.left > scr_width + 150.0f)move_flag |= left_flag;
+			if (dummy.down < 0)move_flag |= up_flag;
+			if (dummy.up > ground + 100.0f)move_flag |= down_flag;
 
 			for (size_t i = 0; i < obstacles.size(); ++i)
 			{
@@ -1042,224 +955,342 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 					if (dummy.left <= current_obstacle.right)move_flag |= left_flag;
 					if (dummy.right >= current_obstacle.left)move_flag |= right_flag;
 					bumped = true;
+					current_obstacle = dummy;
 					break;
 				}
 			}
 
-			switch (move_flag)
+			if (!bumped)
 			{
-			case no_flag:
 				start.x += my_speed;
+				start.y = start.x * slope + intercept;
 				set_edges();
-				break;
 
-			case up_right_flag:
-				start.x -= my_speed;
-				set_edges();
-				SetPathInfo(start.x, ground);
-				break;
-
-			case right_flag:
-				if (center.y < scr_height / 2)
-				{
-					start.x -= my_speed;
-					set_edges();
-					SetPathInfo(start.x, ground);
-				}
-				else SetPathInfo(start.x, sky);
-				break;
-
-			case down_right_flag:
-				SetPathInfo(start.x, sky); 
-				break;
-
-			case up_left_flag:
-				start.x += my_speed;
-				set_edges();
-				break;
-
-			case left_flag:
-				start.x += my_speed;
-				set_edges();
-				break;
-
-			case down_left_flag:
-				start.x += my_speed;
-				set_edges();
-				break;
-
-			case up_flag:
-				start.x += my_speed;
-				set_edges();
-				break;
-
-			case down_flag:
-				start.x += my_speed;
-				set_edges();
-				break;
-			}
-
-			return;
-		}
-	}
-
-	if (move_ex < move_sx)
-	{
-		dummy.left -= my_speed;
-		dummy.right -= my_speed;
-		dummy.up = dummy.left * slope + intercept;
-		dummy.down = dummy.up + _height;
-
-		if (dummy.right < -150.0f)move_flag |= right_flag;
-		if (dummy.left > scr_width + 150.0f)move_flag |= left_flag;
-		if (dummy.down < 0)move_flag |= up_flag;
-		if (dummy.up > ground + 100.0f)move_flag |= down_flag;
-
-		for (size_t i = 0; i < obstacles.size(); ++i)
-		{
-			FRECT current_obstacle{ obstacles[i].start.x,obstacles[i].end.x, obstacles[i].start.y,obstacles[i].end.y };
-
-			if (Intersect(dummy, current_obstacle))
-			{
-				if (dummy.up <= current_obstacle.down)move_flag |= up_flag;
-				if (dummy.down >= current_obstacle.up)move_flag |= down_flag;
-				if (dummy.left <= current_obstacle.right)move_flag |= left_flag;
-				if (dummy.right >= current_obstacle.left)move_flag |= right_flag;
-				bumped = true;
-				break;
+				return;
 			}
 		}
-
-		switch (move_flag)
-		{
-		case no_flag:
-			start.x -= my_speed;
-			start.y = start.x * slope + intercept;
-			set_edges();
-			break;
-
-		case up_right_flag:
-			start.x -= my_speed;
-			start.y = start.x * slope + intercept;
-			set_edges();
-			break;
-
-		case right_flag:
-			start.x -= my_speed;
-			start.y = start.x * slope + intercept;
-			set_edges();
-			break;
-
-		case down_right_flag:
-			start.x -= my_speed;
-			start.y = start.x * slope + intercept;
-			set_edges();
-			break;
-
-		case up_left_flag:
-			SetPathInfo(scr_width, ground);
-			break;
-
-		case left_flag:
-			if (center.y < scr_height / 2) SetPathInfo(start.x, ground);
-			else SetPathInfo(start.x, sky);
-			break;
-
-		case down_left_flag:
-			SetPathInfo(scr_width, sky);
-			break;
-
-		case up_flag:
-			if (center.x < scr_width)SetPathInfo(0, start.y);
-			else SetPathInfo(scr_width, start.y);
-			break;
-
-		case down_flag:
-			if (center.x < scr_width)SetPathInfo(0, start.y);
-			else SetPathInfo(scr_width, start.y); 
-			break;
-		}
-
-		return;
 	}
 	else
 	{
-		dummy.left += my_speed;
-		dummy.right += my_speed;
-		dummy.up = dummy.left * slope + intercept;
-		dummy.down = dummy.up + _height;
-
-		if (dummy.right < -150.0f)move_flag |= right_flag;
-		if (dummy.left > scr_width + 150.0f)move_flag |= left_flag;
-		if (dummy.down < 0)move_flag |= up_flag;
-		if (dummy.up > ground + 100.0f)move_flag |= down_flag;
-
-		for (size_t i = 0; i < obstacles.size(); ++i)
+		if (ver_dir)
 		{
-			FRECT current_obstacle{ obstacles[i].start.x,obstacles[i].end.x, obstacles[i].start.y,obstacles[i].end.y };
-
-			if (Intersect(dummy, current_obstacle))
+			if (move_ey < move_sy)   // MOVING UP
 			{
-				if (dummy.up <= current_obstacle.down)move_flag |= up_flag;
-				if (dummy.down >= current_obstacle.up)move_flag |= down_flag;
-				if (dummy.left <= current_obstacle.right)move_flag |= left_flag;
-				if (dummy.right >= current_obstacle.left)move_flag |= right_flag;
-				bumped = true;
-				break;
+				switch (move_flag)
+				{
+				case up_flag:
+					if (center.x < scr_width / 2.0f)start.x += my_speed;
+					else start.x -= my_speed;
+					set_edges();
+					dummy.left = start.x;
+					dummy.right = end.x;
+					dummy.up = start.y;
+					dummy.down = end.y;
+					if (!Intersect(dummy, current_obstacle))
+					{
+						bumped = false;
+						break;
+					}
+					break;
+
+				case down_flag:
+					bumped = false;
+					start.y -= my_speed;
+					set_edges();
+					break;
+
+				case left_flag:
+					bumped = false;
+					start.y -= my_speed;
+					set_edges();
+					break;
+
+				case right_flag:
+					bumped = false;
+					start.y -= my_speed;
+					set_edges();
+					break;
+
+				case up_right_flag:
+					start.x -= my_speed;
+					set_edges();
+					dummy.left = start.x;
+					dummy.right = end.x;
+					dummy.up = start.y;
+					dummy.down = end.y;
+					if (!Intersect(dummy, current_obstacle))
+					{
+						bumped = false;
+						break;
+					}
+					break;
+
+				case up_left_flag:
+					start.x += my_speed;
+					set_edges();
+					dummy.left = start.x;
+					dummy.right = end.x;
+					dummy.up = start.y;
+					dummy.down = end.y;
+					if (!Intersect(dummy, current_obstacle))
+					{
+						bumped = false;
+						break;
+					}
+					break;
+
+				case down_left_flag:
+					bumped = false;
+					start.y -= my_speed;
+					set_edges();
+					break;
+
+				case down_right_flag:
+					bumped = false;
+					start.y -= my_speed;
+					set_edges();
+					break;
+				}
+			}
+			else
+			{
+				switch (move_flag)
+				{
+				case up_flag:
+					bumped = false;
+					start.y += my_speed;
+					set_edges();
+					break;
+
+				case down_flag:
+					if (center.x < scr_width / 2.0f)start.x += my_speed;
+					else start.x -= my_speed;
+					set_edges();
+					dummy.left = start.x;
+					dummy.right = end.x;
+					dummy.up = start.y;
+					dummy.down = end.y;
+					if (!Intersect(dummy, current_obstacle))
+					{
+						bumped = false;
+						break;
+					}
+					break;
+
+				case left_flag:
+					bumped = false;
+					start.y += my_speed;
+					set_edges();
+					break;
+
+				case right_flag:
+					bumped = false;
+					start.y += my_speed;
+					set_edges();
+					break;
+
+				case up_right_flag:
+					bumped = false;
+					start.y += my_speed;
+					set_edges(); 
+					break;
+
+				case up_left_flag:
+					bumped = false;
+					start.y += my_speed;
+					set_edges(); 
+					break;
+
+				case down_left_flag:
+					start.x += my_speed;
+					set_edges();
+					dummy.left = start.x;
+					dummy.right = end.x;
+					dummy.up = start.y;
+					dummy.down = end.y;
+					if (!Intersect(dummy, current_obstacle))
+					{
+						bumped = false;
+						break;
+					}
+					break;
+
+				case down_right_flag:
+					start.x += my_speed;
+					set_edges();
+					dummy.left = start.x;
+					dummy.right = end.x;
+					dummy.up = start.y;
+					dummy.down = end.y;
+					if (!Intersect(dummy, current_obstacle))
+					{
+						bumped = false;
+						break;
+					}
+					break;
+				}
 			}
 		}
-
-		switch (move_flag)
+		if (hor_dir)
 		{
-		case no_flag:
-			start.x += my_speed;
-			start.y = start.x * slope + intercept;
-			set_edges();
-			break;
+			if (move_ex < move_sx)   // MOVING LEFT
+			{
+				switch (move_flag)
+				{
+				case left_flag:
+					if (center.y < scr_height / 2.0f)start.y += my_speed;
+					else start.y -= my_speed;
+					set_edges();
+					dummy.left = start.x;
+					dummy.right = end.x;
+					dummy.up = start.y;
+					dummy.down = end.y;
+					if (!Intersect(dummy, current_obstacle))
+					{
+						bumped = false;
+						break;
+					}
+					break;
 
-		case up_right_flag:
-			SetPathInfo(0, ground);
-			break;
+				case down_flag:
+					bumped = false;
+					start.x -= my_speed;
+					set_edges();
+					break;
 
-		case right_flag:
-			if (center.y < scr_height / 2)SetPathInfo(start.x, ground);
-			else SetPathInfo(start.x, sky);
-			break;
+				case up_flag:
+					bumped = false;
+					start.x -= my_speed;
+					set_edges();
+					break;
 
-		case down_right_flag:
-			SetPathInfo(0, sky);
-			break;
+				case right_flag:
+					bumped = false;
+					start.x -= my_speed;
+					set_edges();
+					break;
 
-		case up_left_flag:
-			start.x += my_speed;
-			start.y = start.x * slope + intercept;
-			set_edges();
-			break;
+				case up_right_flag:
+					bumped = false;
+					start.x -= my_speed;
+					set_edges();
+					break;
 
-		case left_flag:
-			start.x += my_speed;
-			start.y = start.x * slope + intercept;
-			set_edges();
-			break;
+				case up_left_flag:
+					start.y += my_speed;
+					set_edges();
+					dummy.left = start.x;
+					dummy.right = end.x;
+					dummy.up = start.y;
+					dummy.down = end.y;
+					if (!Intersect(dummy, current_obstacle))
+					{
+						bumped = false;
+						break;
+					}
+					break;
 
-		case down_left_flag:
-			start.x += my_speed;
-			start.y = start.x * slope + intercept;
-			set_edges();
-			break;
+				case down_left_flag:
+					bumped = false;
+					start.y -= my_speed;
+					set_edges();
+					dummy.left = start.x;
+					dummy.right = end.x;
+					dummy.up = start.y;
+					dummy.down = end.y;
+					if (!Intersect(dummy, current_obstacle))
+					{
+						bumped = false;
+						break;
+					}
+					break;
 
-		case up_flag:
-			if (center.x < scr_width)SetPathInfo(0, start.y);
-			else SetPathInfo(scr_width, start.y);	
-			break;
+				case down_right_flag:
+					bumped = false;
+					start.x -= my_speed;
+					set_edges();
+					break;
+				}
+			}
+			else
+			{
+				switch (move_flag)
+				{
+				case up_flag:
+					bumped = false;
+					start.x += my_speed;
+					set_edges();
+					break;
 
-		case down_flag:
-			if (center.x < scr_width)SetPathInfo(0, start.y);
-			else SetPathInfo(scr_width, start.y); 
-			break;
+				case down_flag:
+					bumped = false;
+					start.x += my_speed;
+					set_edges();
+					break;
+
+				case left_flag:
+					bumped = false;
+					start.x += my_speed;
+					set_edges();
+					break;
+
+				case right_flag:
+					if (center.y < scr_height / 2.0f)start.y += my_speed;
+					else start.y -= my_speed;
+					set_edges();
+					dummy.left = start.x;
+					dummy.right = end.x;
+					dummy.up = start.y;
+					dummy.down = end.y;
+					if (!Intersect(dummy, current_obstacle))
+					{
+						bumped = false;
+						break;
+					}
+					break;
+
+				case up_right_flag:
+					start.x += my_speed;
+					set_edges();
+					dummy.left = start.x;
+					dummy.right = end.x;
+					dummy.up = start.y;
+					dummy.down = end.y;
+					if (!Intersect(dummy, current_obstacle))
+					{
+						bumped = false;
+						break;
+					}
+					break;
+
+				case up_left_flag:
+					bumped = false;
+					start.x += my_speed;
+					set_edges();
+					break;
+
+				case down_left_flag:
+					start.x += my_speed;
+					set_edges();
+					break;
+
+				case down_right_flag:
+					start.x += my_speed;
+					set_edges();
+					dummy.left = start.x;
+					dummy.right = end.x;
+					dummy.up = start.y;
+					dummy.down = end.y;
+					if (!Intersect(dummy, current_obstacle))
+					{
+						bumped = false;
+						break;
+					}
+					break;
+				}
+			}
 		}
-
-		return;
+		
 	}
 }
 

@@ -486,6 +486,7 @@ namespace dll
 
 		int max_lifes{ 0 };
 
+		unsigned char move_flag{ no_flag };
 		FRECT current_obstacle{ -1.0f, -1.0f, -1.0f, -1.0f };
 
 		ORCS(orcs _what, float _sx, float _sy);
