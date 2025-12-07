@@ -1131,7 +1131,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 				}
 			}
 		}
-		if (hor_dir)
+		else if (hor_dir)
 		{
 			if (move_ex < move_sx)   // MOVING LEFT
 			{
@@ -1290,7 +1290,244 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 				}
 			}
 		}
-		
+		else if (move_sx < move_ex) // LEFT
+		{
+			switch (move_flag)
+			{
+			case left_flag:
+				if (center.y < scr_height / 2.0f)start.y += my_speed;
+				else start.y -= my_speed;
+				set_edges();
+				dummy.left = start.x;
+				dummy.right = end.x;
+				dummy.up = start.y;
+				dummy.down = end.y;
+				if (!Intersect(dummy, current_obstacle))
+				{
+					bumped = false;
+					break;
+				}
+				break;
+
+			case down_flag:
+				start.x -= my_speed;
+				set_edges();
+				dummy.left = start.x;
+				dummy.right = end.x;
+				dummy.up = start.y;
+				dummy.down = end.y;
+				if (!Intersect(dummy, current_obstacle))
+				{
+					bumped = false;
+					break;
+				}
+
+				break;
+
+			case up_flag:
+				start.x -= my_speed;
+				set_edges();
+				dummy.left = start.x;
+				dummy.right = end.x;
+				dummy.up = start.y;
+				dummy.down = end.y;
+				if (!Intersect(dummy, current_obstacle))
+				{
+					bumped = false;
+					break;
+				}
+				break;
+
+			case right_flag:
+				start.x -= my_speed;
+				set_edges();
+				dummy.left = start.x;
+				dummy.right = end.x;
+				dummy.up = start.y;
+				dummy.down = end.y;
+				if (!Intersect(dummy, current_obstacle))
+				{
+					bumped = false;
+					break;
+				}
+				break;
+
+			case up_right_flag:
+				start.x -= my_speed;
+				set_edges();
+				dummy.left = start.x;
+				dummy.right = end.x;
+				dummy.up = start.y;
+				dummy.down = end.y;
+				if (!Intersect(dummy, current_obstacle))
+				{
+					bumped = false;
+					break;
+				}
+				break;
+
+			case up_left_flag:
+				start.y += my_speed;
+				set_edges();
+				dummy.left = start.x;
+				dummy.right = end.x;
+				dummy.up = start.y;
+				dummy.down = end.y;
+				if (!Intersect(dummy, current_obstacle))
+				{
+					bumped = false;
+					break;
+				}
+				break;
+
+			case down_left_flag:
+				bumped = false;
+				start.y -= my_speed;
+				set_edges();
+				dummy.left = start.x;
+				dummy.right = end.x;
+				dummy.up = start.y;
+				dummy.down = end.y;
+				if (!Intersect(dummy, current_obstacle))
+				{
+					bumped = false;
+					break;
+				}
+				break;
+
+			case down_right_flag:
+				start.x -= my_speed;
+				set_edges();
+				dummy.left = start.x;
+				dummy.right = end.x;
+				dummy.up = start.y;
+				dummy.down = end.y;
+				if (!Intersect(dummy, current_obstacle))
+				{
+					bumped = false;
+					break;
+				}
+				break;
+			}
+		}
+		else
+		{
+			switch (move_flag)
+			{
+			case up_flag:
+				start.x += my_speed;
+				set_edges();
+				dummy.left = start.x;
+				dummy.right = end.x;
+				dummy.up = start.y;
+				dummy.down = end.y;
+				if (!Intersect(dummy, current_obstacle))
+				{
+					bumped = false;
+					break;
+				}
+				break;
+
+			case down_flag:
+				start.x += my_speed;
+				set_edges();
+				dummy.left = start.x;
+				dummy.right = end.x;
+				dummy.up = start.y;
+				dummy.down = end.y;
+				if (!Intersect(dummy, current_obstacle))
+				{
+					bumped = false;
+					break;
+				}
+				break;
+
+			case left_flag:
+				start.x += my_speed;
+				set_edges();
+				dummy.left = start.x;
+				dummy.right = end.x;
+				dummy.up = start.y;
+				dummy.down = end.y;
+				if (!Intersect(dummy, current_obstacle))
+				{
+					bumped = false;
+					break;
+				}
+				break;
+
+			case right_flag:
+				if (center.y < scr_height / 2.0f)start.y += my_speed;
+				else start.y -= my_speed;
+				set_edges();
+				dummy.left = start.x;
+				dummy.right = end.x;
+				dummy.up = start.y;
+				dummy.down = end.y;
+				if (!Intersect(dummy, current_obstacle))
+				{
+					bumped = false;
+					break;
+				}
+				break;
+
+			case up_right_flag:
+				start.x += my_speed;
+				set_edges();
+				dummy.left = start.x;
+				dummy.right = end.x;
+				dummy.up = start.y;
+				dummy.down = end.y;
+				if (!Intersect(dummy, current_obstacle))
+				{
+					bumped = false;
+					break;
+				}
+				break;
+
+			case up_left_flag:
+				start.x += my_speed;
+				set_edges();
+				dummy.left = start.x;
+				dummy.right = end.x;
+				dummy.up = start.y;
+				dummy.down = end.y;
+				if (!Intersect(dummy, current_obstacle))
+				{
+					bumped = false;
+					break;
+				}
+				break;
+
+			case down_left_flag:
+				start.x += my_speed;
+				set_edges();
+				dummy.left = start.x;
+				dummy.right = end.x;
+				dummy.up = start.y;
+				dummy.down = end.y;
+				if (!Intersect(dummy, current_obstacle))
+				{
+					bumped = false;
+					break;
+				}
+				break;
+
+			case down_right_flag:
+				start.x += my_speed;
+				set_edges();
+				dummy.left = start.x;
+				dummy.right = end.x;
+				dummy.up = start.y;
+				dummy.down = end.y;
+				if (!Intersect(dummy, current_obstacle))
+				{
+					bumped = false;
+					break;
+				}
+				break;
+			}	
+		}
 	}
 }
 
