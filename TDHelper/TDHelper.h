@@ -486,15 +486,15 @@ namespace dll
 
 		int max_lifes{ 0 };
 
-		unsigned char move_flag{ no_flag };
-		FRECT current_obstacle{ -1.0f, -1.0f, -1.0f, -1.0f };
-
 		ORCS(orcs _what, float _sx, float _sy);
 
 	public:
 		dirs dir{ dirs::stop };
 		states state = states::idle;
 		bool bumped = false;
+
+		unsigned char move_flag{ no_flag };
+		FRECT bumped_obstacle{ -1.0f, -1.0f, -1.0f, -1.0f };
 
 		int lifes{ 0 };
 
