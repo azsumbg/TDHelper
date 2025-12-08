@@ -241,13 +241,13 @@ bool dll::SHOTS::move()
 		{
 			start.y -= speed;
 			set_edges();
-			if (start.y <= move_ey)return false;
+			if (end.y <= sky)return false;
 		}
-		else if (move_ey > move_sy)
+		else 
 		{
 			start.y += speed;
 			set_edges();
-			if (end.y >= move_ey)return false;
+			if (start.y >= ground)return false;
 		}
 	}
 	if (hor_dir)
@@ -256,13 +256,13 @@ bool dll::SHOTS::move()
 		{
 			start.x -= speed;
 			set_edges();
-			if (start.x <= move_ex)return false;
+			if (end.x <= 0)return false;
 		}
-		else if (move_ex > move_sy)
+		else 
 		{
 			start.x += speed;
 			set_edges();
-			if (end.x >= move_ex)return false;
+			if (start.x >= scr_width)return false;
 		}
 	}
 
@@ -271,14 +271,14 @@ bool dll::SHOTS::move()
 		start.x -= speed;
 		start.y = start.x * slope + intercept;
 		set_edges();
-		if (start.y >= ground || end.y <= sky || start.x >= scr_width || end.x <= 0 || start.x <= move_ex)return false;
+		if (start.y >= ground || end.y <= sky || start.x >= scr_width || end.x <= 0)return false;
 	}
 	if (move_sx < move_ex)
 	{
 		start.x += speed;
 		start.y = start.x * slope + intercept;
 		set_edges();
-		if (start.y >= ground || end.y <= sky || start.x >= scr_width || end.x <= 0 || start.x >= move_ex)return false;
+		if (start.y >= ground || end.y <= sky || start.x >= scr_width || end.x <= 0)return false;
 	}
 
 	return true;
@@ -319,18 +319,18 @@ dll::BUILDINGS::BUILDINGS(buildings _what, float _sx, float _sy) :PROTON(_sx, _s
 		new_dims(180.0f, 182.0f);
 		strenght = 5;
 		lifes = 50;
-		fire_rate = 200;
-		range = 75.0f;
+		fire_rate = 50;
+		range = 200.0f;
 		max_frames = 4;
 		frame_delay = 15;
 		break;
 
-	case buildings::arhcer:
+	case buildings::archer:
 		new_dims(37.0f, 85.0f);
 		strenght = 5;
 		lifes = 50;
-		fire_rate = 50;
-		range = 75.0f;
+		fire_rate = 20;
+		range = 300.0f;
 		max_frames = 7;
 		frame_delay = 9;
 		break;
@@ -339,8 +339,8 @@ dll::BUILDINGS::BUILDINGS(buildings _what, float _sx, float _sy) :PROTON(_sx, _s
 		new_dims(75.0f, 34.0f);
 		strenght = 10;
 		lifes = 75;
-		fire_rate = 75;
-		range = 100.0f;
+		fire_rate = 35;
+		range = 280.0f;
 		max_frames = 57;
 		frame_delay = 1;
 		break;
@@ -349,8 +349,8 @@ dll::BUILDINGS::BUILDINGS(buildings _what, float _sx, float _sy) :PROTON(_sx, _s
 		new_dims(85.0f, 64.0f);
 		strenght = 15;
 		lifes = 100;
-		fire_rate = 100;
-		range = 130.0f;
+		fire_rate = 40;
+		range = 300.0f;
 		max_frames = 9;
 		frame_delay = 7;
 		break;
@@ -358,8 +358,8 @@ dll::BUILDINGS::BUILDINGS(buildings _what, float _sx, float _sy) :PROTON(_sx, _s
 	case buildings::big_cannon:
 		new_dims(90.0f, 86.0f);
 		strenght = 30;
-		fire_rate = 130;
-		lifes = 150;
+		fire_rate = 50;
+		lifes = 350;
 		range = 150.0f;
 		max_frames = 90;
 		frame_delay = 1;
@@ -369,8 +369,8 @@ dll::BUILDINGS::BUILDINGS(buildings _what, float _sx, float _sy) :PROTON(_sx, _s
 		new_dims(65.0f, 85.0f);
 		strenght = 12;
 		lifes = 100;
-		fire_rate = 50;
-		range = 130.0f;
+		fire_rate = 45;
+		range = 250.0f;
 		max_frames = 36;
 		frame_delay = 2;
 		break;
@@ -379,8 +379,8 @@ dll::BUILDINGS::BUILDINGS(buildings _what, float _sx, float _sy) :PROTON(_sx, _s
 		new_dims(44.0f, 85.0f);
 		strenght = 18;
 		lifes = 120;
-		fire_rate = 75;
-		range = 150.0f;
+		fire_rate = 55;
+		range = 300.0f;
 		max_frames = 34;
 		frame_delay = 2;
 		break;
@@ -389,8 +389,8 @@ dll::BUILDINGS::BUILDINGS(buildings _what, float _sx, float _sy) :PROTON(_sx, _s
 		new_dims(32.0f, 90.0f);
 		strenght = 30;
 		lifes = 180;
-		fire_rate = 100;
-		range = 200.0f;
+		fire_rate = 75;
+		range = 400.0f;
 		max_frames = 97;
 		frame_delay = 1;
 		break;
@@ -417,7 +417,7 @@ void dll::BUILDINGS::set_type(buildings what)
 		frame_delay = 15;
 		break;
 
-	case buildings::arhcer:
+	case buildings::archer:
 		new_dims(37.0f, 85.0f);
 		strenght = 5;
 		lifes = 50;
@@ -511,7 +511,7 @@ int dll::BUILDINGS::get_frame()
 			frame_delay = 15;
 			break;
 
-		case buildings::arhcer:
+		case buildings::archer:
 			frame_delay = 9;
 			break;
 
@@ -1054,7 +1054,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 					break;
 				}
 			}
-			else
+			else if (move_ey > move_sy)
 			{
 				switch (move_flag)
 				{
@@ -1132,6 +1132,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 					break;
 				}
 			}
+			else bumped = false;
 		}
 		else if (hor_dir)
 		{
@@ -1213,7 +1214,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 					break;
 				}
 			}
-			else
+			else if (move_ex > move_sx)
 			{
 				switch (move_flag)
 				{
@@ -1290,6 +1291,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 					break;
 				}
 			}
+			else bumped = false;
 		}
 		else if (move_sx > move_ex) // LEFT
 		{
@@ -1355,6 +1357,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 
 			case up_right_flag:
 				start.x -= my_speed;
+				start.y += my_speed;
 				set_edges();
 				dummy.left = start.x;
 				dummy.right = end.x;
@@ -1397,6 +1400,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 
 			case down_right_flag:
 				start.x -= my_speed;
+				start.y -= my_speed;
 				set_edges();
 				dummy.left = start.x;
 				dummy.right = end.x;
@@ -1410,7 +1414,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 				break;
 			}
 		}
-		else
+		else if (move_sx < move_ex)
 		{
 			switch (move_flag)
 			{
@@ -1472,7 +1476,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 				break;
 
 			case up_right_flag:
-				start.x += my_speed;
+				start.y += my_speed;
 				set_edges();
 				dummy.left = start.x;
 				dummy.right = end.x;
@@ -1487,6 +1491,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 
 			case up_left_flag:
 				start.x += my_speed;
+				start.y += my_speed;
 				set_edges();
 				dummy.left = start.x;
 				dummy.right = end.x;
@@ -1501,6 +1506,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 
 			case down_left_flag:
 				start.x += my_speed;
+				start.y -= my_speed;
 				set_edges();
 				dummy.left = start.x;
 				dummy.right = end.x;
@@ -1514,7 +1520,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 				break;
 
 			case down_right_flag:
-				start.x += my_speed;
+				start.y -= my_speed;
 				set_edges();
 				dummy.left = start.x;
 				dummy.right = end.x;
@@ -1528,6 +1534,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 				break;
 			}	
 		}
+		
 	}
 }
 
