@@ -1481,8 +1481,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 			switch (move_flag)
 			{
 			case left_flag:
-				if (center.y < scr_height / 2.0f)start.y += my_speed;
-				else start.y -= my_speed;
+				start.y -= my_speed;
 				set_edges();
 				dummy.left = start.x;
 				dummy.right = end.x;
@@ -1497,6 +1496,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 
 			case down_flag:
 				start.x -= my_speed;
+				start.y = start.x * slope + intercept;
 				set_edges();
 				dummy.left = start.x;
 				dummy.right = end.x;
@@ -1512,6 +1512,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 
 			case up_flag:
 				start.x -= my_speed;
+				start.y = start.x * slope + intercept;
 				set_edges();
 				dummy.left = start.x;
 				dummy.right = end.x;
@@ -1554,7 +1555,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 				break;
 
 			case up_left_flag:
-				start.x -= my_speed;
+				//start.x -= my_speed;
 				start.y += my_speed;
 				set_edges();
 				dummy.left = start.x;
@@ -1569,7 +1570,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 				break;
 
 			case down_left_flag:
-				start.x -= my_speed;
+				//start.x -= my_speed;
 				start.y -= my_speed;
 				set_edges();
 				dummy.left = start.x;
@@ -1605,6 +1606,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 			{
 			case up_flag:
 				start.x += my_speed;
+				start.y = start.x * slope + intercept;
 				set_edges();
 				dummy.left = start.x;
 				dummy.right = end.x;
@@ -1619,6 +1621,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 
 			case down_flag:
 				start.x += my_speed;
+				start.y = start.x * slope + intercept;
 				set_edges();
 				dummy.left = start.x;
 				dummy.right = end.x;
@@ -1633,6 +1636,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 
 			case left_flag:
 				start.x += my_speed;
+				start.y = start.x * slope + intercept;
 				set_edges();
 				dummy.left = start.x;
 				dummy.right = end.x;
@@ -1646,8 +1650,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 				break;
 
 			case right_flag:
-				if (center.y < scr_height / 2.0f)start.y += my_speed;
-				else start.y -= my_speed;
+				start.y += my_speed;
 				set_edges();
 				dummy.left = start.x;
 				dummy.right = end.x;
@@ -1661,7 +1664,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 				break;
 
 			case up_right_flag:
-				start.x += my_speed;
+				//start.x += my_speed;
 				start.y += my_speed;
 				set_edges();
 				dummy.left = start.x;
@@ -1677,8 +1680,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 
 			case up_left_flag:
 				start.x += my_speed;
-				start.y += my_speed;
-				set_edges();
+				start.y = start.x * slope + intercept; set_edges();
 				dummy.left = start.x;
 				dummy.right = end.x;
 				dummy.up = start.y;
@@ -1692,8 +1694,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 
 			case down_left_flag:
 				start.x += my_speed;
-				start.y -= my_speed;
-				set_edges();
+				start.y = start.x * slope + intercept; set_edges();
 				dummy.left = start.x;
 				dummy.right = end.x;
 				dummy.up = start.y;
@@ -1706,7 +1707,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 				break;
 
 			case down_right_flag:
-				start.x += my_speed;
+				//start.x += my_speed;
 				start.y -= my_speed;
 				set_edges();
 				dummy.left = start.x;
@@ -1723,8 +1724,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 		}
 		else
 		{
-			if (center.y < scr_height / 2.0f)start.y += my_speed;
-			else start.y -= my_speed;
+			start.y -= my_speed;
 			set_edges();
 			dummy.left = start.x;
 			dummy.right = end.x;
