@@ -507,6 +507,8 @@ namespace dll
 		int GetFrame();
 		int Attack();
 
+		unsigned char GetMoveFlag() const;
+
 		void Move(BAG<ASSETS>& obstacles, float gear);
 
 		friend TDHELPER_API ORCS* OrcFactory(orcs what, float sx, float sy);

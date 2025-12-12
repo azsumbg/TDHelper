@@ -753,6 +753,11 @@ int dll::ORCS::Attack()
 	return 0;
 }
 
+unsigned char dll::ORCS::GetMoveFlag() const
+{
+	return move_flag;
+}
+
 void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 {
 	float my_speed = speed + gear / 10.0f;
@@ -778,10 +783,14 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 
 					if (Intersect(dummy, current_obstacle))
 					{
-						if (dummy.up >= current_obstacle.up && dummy.up <= current_obstacle.down)move_flag |= up_flag;
-						if (dummy.down >= current_obstacle.up && dummy.down <= current_obstacle.down)move_flag |= down_flag;
-						if (dummy.left >= current_obstacle.left && dummy.left <= current_obstacle.right)move_flag |= left_flag;
-						if (dummy.right >= current_obstacle.left && dummy.right <= current_obstacle.right)move_flag |= right_flag;
+						if (dummy.up >= current_obstacle.down && dummy.up <= current_obstacle.down
+							&& dummy.down > current_obstacle.down)move_flag |= up_flag;
+						if (dummy.down >= current_obstacle.up && dummy.down <= current_obstacle.down
+							&& dummy.up < current_obstacle.up)move_flag |= down_flag;
+						if (dummy.left >= current_obstacle.left && dummy.left <= current_obstacle.right
+							&& dummy.right > current_obstacle.right)move_flag |= left_flag;
+						if (dummy.right >= current_obstacle.left && dummy.right <= current_obstacle.right
+							&& dummy.left < current_obstacle.left)move_flag |= right_flag;
 
 						bumped_obstacle = current_obstacle;
 
@@ -812,10 +821,14 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 
 					if (Intersect(dummy, current_obstacle))
 					{
-						if (dummy.up >= current_obstacle.up && dummy.up <= current_obstacle.down)move_flag |= up_flag;
-						if (dummy.down >= current_obstacle.up && dummy.down <= current_obstacle.down)move_flag |= down_flag;
-						if (dummy.left >= current_obstacle.left && dummy.left <= current_obstacle.right)move_flag |= left_flag;
-						if (dummy.right >= current_obstacle.left && dummy.right <= current_obstacle.right)move_flag |= right_flag;
+						if (dummy.up >= current_obstacle.down && dummy.up <= current_obstacle.down
+							&& dummy.down > current_obstacle.down)move_flag |= up_flag;
+						if (dummy.down >= current_obstacle.up && dummy.down <= current_obstacle.down
+							&& dummy.up < current_obstacle.up)move_flag |= down_flag;
+						if (dummy.left >= current_obstacle.left && dummy.left <= current_obstacle.right
+							&& dummy.right > current_obstacle.right)move_flag |= left_flag;
+						if (dummy.right >= current_obstacle.left && dummy.right <= current_obstacle.right
+							&& dummy.left < current_obstacle.left)move_flag |= right_flag; 
 						bumped_obstacle = current_obstacle;
 						bumped = true;
 						break;
@@ -831,7 +844,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 				}
 			}
 		}
-		if (hor_dir)
+		else if (hor_dir)
 		{
 			if (move_ex < move_sx)
 			{
@@ -846,10 +859,14 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 
 					if (Intersect(dummy, current_obstacle))
 					{
-						if (dummy.up >= current_obstacle.up && dummy.up <= current_obstacle.down)move_flag |= up_flag;
-						if (dummy.down >= current_obstacle.up && dummy.down <= current_obstacle.down)move_flag |= down_flag;
-						if (dummy.left >= current_obstacle.left && dummy.left <= current_obstacle.right)move_flag |= left_flag;
-						if (dummy.right >= current_obstacle.left && dummy.right <= current_obstacle.right)move_flag |= right_flag;
+						if (dummy.up >= current_obstacle.down && dummy.up <= current_obstacle.down
+							&& dummy.down > current_obstacle.down)move_flag |= up_flag;
+						if (dummy.down >= current_obstacle.up && dummy.down <= current_obstacle.down
+							&& dummy.up < current_obstacle.up)move_flag |= down_flag;
+						if (dummy.left >= current_obstacle.left && dummy.left <= current_obstacle.right
+							&& dummy.right > current_obstacle.right)move_flag |= left_flag;
+						if (dummy.right >= current_obstacle.left && dummy.right <= current_obstacle.right
+							&& dummy.left < current_obstacle.left)move_flag |= right_flag;
 						bumped_obstacle = current_obstacle;
 						bumped = true;
 						break;
@@ -877,10 +894,14 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 
 					if (Intersect(dummy, current_obstacle))
 					{
-						if (dummy.up >= current_obstacle.up && dummy.up <= current_obstacle.down)move_flag |= up_flag;
-						if (dummy.down >= current_obstacle.up && dummy.down <= current_obstacle.down)move_flag |= down_flag;
-						if (dummy.left >= current_obstacle.left && dummy.left <= current_obstacle.right)move_flag |= left_flag;
-						if (dummy.right >= current_obstacle.left && dummy.right <= current_obstacle.right)move_flag |= right_flag;
+						if (dummy.up >= current_obstacle.down && dummy.up <= current_obstacle.down
+							&& dummy.down > current_obstacle.down)move_flag |= up_flag;
+						if (dummy.down >= current_obstacle.up && dummy.down <= current_obstacle.down
+							&& dummy.up < current_obstacle.up)move_flag |= down_flag;
+						if (dummy.left >= current_obstacle.left && dummy.left <= current_obstacle.right
+							&& dummy.right > current_obstacle.right)move_flag |= left_flag;
+						if (dummy.right >= current_obstacle.left && dummy.right <= current_obstacle.right
+							&& dummy.left < current_obstacle.left)move_flag |= right_flag;
 						bumped = true;
 						bumped_obstacle = current_obstacle;
 						break;
@@ -896,8 +917,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 				}
 			}
 		}
-
-		if (move_ex < move_sx)
+		else if (move_ex < move_sx)
 		{
 			dummy.left -= my_speed;
 			dummy.right -= my_speed;
@@ -915,10 +935,14 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 
 				if (Intersect(dummy, current_obstacle))
 				{
-					if (dummy.up >= current_obstacle.up && dummy.up <= current_obstacle.down)move_flag |= up_flag;
-					if (dummy.down >= current_obstacle.up && dummy.down <= current_obstacle.down)move_flag |= down_flag;
-					if (dummy.left >= current_obstacle.left && dummy.left <= current_obstacle.right)move_flag |= left_flag;
-					if (dummy.right >= current_obstacle.left && dummy.right <= current_obstacle.right)move_flag |= right_flag;
+					if (dummy.up >= current_obstacle.down && dummy.up <= current_obstacle.down
+						&& dummy.down > current_obstacle.down)move_flag |= up_flag;
+					if (dummy.down >= current_obstacle.up && dummy.down <= current_obstacle.down
+						&& dummy.up < current_obstacle.up)move_flag |= down_flag;
+					if (dummy.left >= current_obstacle.left && dummy.left <= current_obstacle.right
+						&& dummy.right > current_obstacle.right)move_flag |= left_flag;
+					if (dummy.right >= current_obstacle.left && dummy.right <= current_obstacle.right
+						&& dummy.left < current_obstacle.left)move_flag |= right_flag;
 					bumped = true;
 					bumped_obstacle = current_obstacle;
 					break;
@@ -952,10 +976,14 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 
 				if (Intersect(dummy, current_obstacle))
 				{
-					if (dummy.up >= current_obstacle.up && dummy.up <= current_obstacle.down)move_flag |= up_flag;
-					if (dummy.down >= current_obstacle.up && dummy.down <= current_obstacle.down)move_flag |= down_flag;
-					if (dummy.left >= current_obstacle.left && dummy.left <= current_obstacle.right)move_flag |= left_flag;
-					if (dummy.right >= current_obstacle.left && dummy.right <= current_obstacle.right)move_flag |= right_flag;
+					if (dummy.up >= current_obstacle.down && dummy.up <= current_obstacle.down
+						&& dummy.down > current_obstacle.down)move_flag |= up_flag;
+					if (dummy.down >= current_obstacle.up && dummy.down <= current_obstacle.down
+						&& dummy.up < current_obstacle.up)move_flag |= down_flag;
+					if (dummy.left >= current_obstacle.left && dummy.left <= current_obstacle.right
+						&& dummy.right > current_obstacle.right)move_flag |= left_flag;
+					if (dummy.right >= current_obstacle.left && dummy.right <= current_obstacle.right
+						&& dummy.left < current_obstacle.left)move_flag |= right_flag;
 					bumped = true;
 					bumped_obstacle = current_obstacle;
 					break;
@@ -983,14 +1011,19 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 				case up_flag:
 					start.x -= my_speed;
 					set_edges();
-					dummy.left = start.x;
-					dummy.right = end.x;
-					dummy.up = start.y;
-					dummy.down = end.y;
-					if (!Intersect(dummy, bumped_obstacle))
+					if (end.x < bumped_obstacle.left)
 					{
-						bumped = false;
-						break;
+						start.y -= my_speed;
+						set_edges();
+						dummy.left = start.x;
+						dummy.right = end.x;
+						dummy.up = start.y;
+						dummy.down = end.y;
+						if (!Intersect(dummy, bumped_obstacle))
+						{
+							bumped = false;
+							break;
+						}
 					}
 					break;
 
@@ -1039,14 +1072,15 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 				case up_right_flag:
 					start.x -= my_speed;
 					set_edges();
-					dummy.left = start.x;
-					dummy.right = end.x;
-					dummy.up = start.y;
-					dummy.down = end.y;
-					if (end.x <= bumped_obstacle.left)
+					if (end.x < bumped_obstacle.left)
 					{
 						start.y -= my_speed;
 						set_edges();
+						dummy.left = start.x;
+						dummy.right = end.x;
+						dummy.up = start.y;
+						dummy.down = end.y;
+
 						if (!Intersect(dummy, bumped_obstacle))
 						{
 							bumped = false;
@@ -1058,14 +1092,14 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 				case up_left_flag:
 					start.x += my_speed;
 					set_edges();
-					dummy.left = start.x;
-					dummy.right = end.x;
-					dummy.up = start.y;
-					dummy.down = end.y;
-					if (start.x >= bumped_obstacle.right)
+					if (start.x > bumped_obstacle.right)
 					{
 						start.y -= my_speed;
 						set_edges();
+						dummy.left = start.x;
+						dummy.right = end.x;
+						dummy.up = start.y;
+						dummy.down = end.y;
 						if (!Intersect(dummy, bumped_obstacle))
 						{
 							bumped = false;
@@ -1124,14 +1158,19 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 				case down_flag:
 					start.x += my_speed;
 					set_edges();
-					dummy.left = start.x;
-					dummy.right = end.x;
-					dummy.up = start.y;
-					dummy.down = end.y;
-					if (!Intersect(dummy, bumped_obstacle))
+					if (start.x > bumped_obstacle.right)
 					{
-						bumped = false;
-						break;
+						start.y += my_speed;
+						set_edges();
+						dummy.left = start.x;
+						dummy.right = end.x;
+						dummy.up = start.y;
+						dummy.down = end.y;
+						if (!Intersect(dummy, bumped_obstacle))
+						{
+							bumped = false;
+							break;
+						}
 					}
 					break;
 
@@ -1194,14 +1233,14 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 				case down_left_flag:
 					start.x += my_speed;
 					set_edges();
-					dummy.left = start.x;
-					dummy.right = end.x;
-					dummy.up = start.y;
-					dummy.down = end.y;
-					if (start.x >= bumped_obstacle.right)
+					if (start.x > bumped_obstacle.right)
 					{
 						start.y += my_speed;
 						set_edges();
+						dummy.left = start.x;
+						dummy.right = end.x;
+						dummy.up = start.y;
+						dummy.down = end.y;
 						if (!Intersect(dummy, bumped_obstacle))
 						{
 							bumped = false;
@@ -1213,14 +1252,14 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 				case down_right_flag:
 					start.x -= my_speed;
 					set_edges();
-					dummy.left = start.x;
-					dummy.right = end.x;
-					dummy.up = start.y;
-					dummy.down = end.y;
-					if (end.x >= bumped_obstacle.left)
+					if (end.x < bumped_obstacle.left)
 					{
 						start.y += my_speed;
 						set_edges();
+						dummy.left = start.x;
+						dummy.right = end.x;
+						dummy.up = start.y;
+						dummy.down = end.y;
 						if (!Intersect(dummy, bumped_obstacle))
 						{
 							bumped = false;
@@ -1230,16 +1269,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 					break;
 				}
 			}
-			else
-			{
-				start.x -= my_speed;
-				set_edges();
-				dummy.left = start.x;
-				dummy.right = end.x;
-				dummy.up = start.y;
-				dummy.down = end.y;
-				if (!Intersect(dummy, bumped_obstacle))bumped = false;
-			}
+			else bumped = false;	
 		}
 		else if (hor_dir)
 		{
@@ -1250,14 +1280,19 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 				case left_flag:
 					start.y += my_speed;
 					set_edges();
-					dummy.left = start.x;
-					dummy.right = end.x;
-					dummy.up = start.y;
-					dummy.down = end.y;
-					if (!Intersect(dummy, bumped_obstacle))
+					if (start.y > bumped_obstacle.down)
 					{
-						bumped = false;
-						break;
+						start.x -= my_speed;
+						set_edges();
+						dummy.left = start.x;
+						dummy.right = end.x;
+						dummy.up = start.y;
+						dummy.down = end.y;
+						if (!Intersect(dummy, bumped_obstacle))
+						{
+							bumped = false;
+							break;
+						}
 					}
 					break;
 
@@ -1320,41 +1355,39 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 				case up_left_flag:
 					start.y += my_speed;
 					set_edges();
-					dummy.left = start.x;
-					dummy.right = end.x;
-					dummy.up = start.y;
-					dummy.down = end.y;
-					if (start.y >= bumped_obstacle.down)
+					if (start.y > bumped_obstacle.down)
 					{
-						start.x += my_speed;
+						start.x -= my_speed;
 						set_edges();
+						dummy.left = start.x;
+						dummy.right = end.x;
+						dummy.up = start.y;
+						dummy.down = end.y;
 						if (!Intersect(dummy, bumped_obstacle))
 						{
 							bumped = false;
 							break;
 						}
 					}
-
 					break;
 
 				case down_left_flag:
 					start.y -= my_speed;
 					set_edges();
-					dummy.left = start.x;
-					dummy.right = end.x;
-					dummy.up = start.y;
-					dummy.down = end.y;
-					if (end.y <= bumped_obstacle.up)
+					if (end.y < bumped_obstacle.up)
 					{
-						start.x += my_speed;
+						start.x -= my_speed;
 						set_edges();
+						dummy.left = start.x;
+						dummy.right = end.x;
+						dummy.up = start.y;
+						dummy.down = end.y;
 						if (!Intersect(dummy, bumped_obstacle))
 						{
 							bumped = false;
 							break;
 						}
 					}
-
 					break;
 
 				case down_right_flag:
@@ -1402,7 +1435,6 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 						bumped = false;
 						break;
 					}
-
 					break;
 
 				case left_flag:
@@ -1417,82 +1449,95 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 						bumped = false;
 						break;
 					}
-
 					break;
 
 				case right_flag:
 					start.y -= my_speed;
 					set_edges();
-					dummy.left = start.x;
-					dummy.right = end.x;
-					dummy.up = start.y;
-					dummy.down = end.y;
-					if (!Intersect(dummy, bumped_obstacle))
+					if (end.y < bumped_obstacle.up)
 					{
-						bumped = false;
-						break;
-					}
-					break;
-
-				case up_right_flag:
-					start.x -= my_speed;
-					set_edges();
-					dummy.left = start.x;
-					dummy.right = end.x;
-					dummy.up = start.y;
-					dummy.down = end.y;
-					if (end.x <= bumped_obstacle.left)
-					{
-						start.y -= my_speed;
+						start.x += my_speed;
 						set_edges();
+						dummy.left = start.x;
+						dummy.right = end.x;
+						dummy.up = start.y;
+						dummy.down = end.y;
 						if (!Intersect(dummy, bumped_obstacle))
 						{
 							bumped = false;
 							break;
 						}
 					}
+					break;
 
+				case up_right_flag:
+					start.y += my_speed;
+					set_edges();
+					if (start.y > bumped_obstacle.down)
+					{
+						start.x += my_speed;
+						set_edges();
+						dummy.left = start.x;
+						dummy.right = end.x;
+						dummy.up = start.y;
+						dummy.down = end.y;
+						if (!Intersect(dummy, bumped_obstacle))
+						{
+							bumped = false;
+							break;
+						}
+					}
 					break;
 
 				case up_left_flag:
-					start.x += my_speed;
+					start.y += my_speed;
 					set_edges();
-					dummy.left = start.x;
-					dummy.right = end.x;
-					dummy.up = start.y;
-					dummy.down = end.y;
-					if (!Intersect(dummy, bumped_obstacle))
+					if (end.y < bumped_obstacle.up)
 					{
-						bumped = false;
-						break;
+						start.x -= my_speed;
+						set_edges();
+						dummy.left = start.x;
+						dummy.right = end.x;
+						dummy.up = start.y;
+						dummy.down = end.y;
+						if (!Intersect(dummy, bumped_obstacle))
+						{
+							bumped = false;
+							break;
+						}
 					}
 					break;
 
 				case down_left_flag:
-					start.x += my_speed;
+					start.y += my_speed;
 					set_edges();
-					dummy.left = start.x;
-					dummy.right = end.x;
-					dummy.up = start.y;
-					dummy.down = end.y;
-					if (!Intersect(dummy, bumped_obstacle))
+					if (start.y > bumped_obstacle.down)
 					{
-						bumped = false;
-						break;
+						start.x -= my_speed;
+						set_edges();
+						dummy.left = start.x;
+						dummy.right = end.x;
+						dummy.up = start.y;
+						dummy.down = end.y;
+						if (!Intersect(dummy, bumped_obstacle))
+						{
+							bumped = false;
+							break;
+						}
 					}
 					break;
 
 				case down_right_flag:
-					start.x -= my_speed;
+					start.x += my_speed;
 					set_edges();
-					dummy.left = start.x;
-					dummy.right = end.x;
-					dummy.up = start.y;
-					dummy.down = end.y;
-					if (end.x <= bumped_obstacle.left)
+					if (start.y > bumped_obstacle.down)
 					{
-						start.y += my_speed;
+						start.x += my_speed;
 						set_edges();
+						dummy.left = start.x;
+						dummy.right = end.x;
+						dummy.up = start.y;
+						dummy.down = end.y;
 						if (!Intersect(dummy, bumped_obstacle))
 						{
 							bumped = false;
@@ -1502,17 +1547,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 					break;
 				}
 			}
-			else
-			{
-				if (center.y < scr_height / 2.0f)start.y += my_speed;
-				else start.y -= my_speed;
-				set_edges();
-				dummy.left = start.x;
-				dummy.right = end.x;
-				dummy.up = start.y;
-				dummy.down = end.y;
-				if (!Intersect(dummy, bumped_obstacle))bumped = false;
-			}
+			else bumped = false;
 		}
 		else if (move_sx > move_ex) // LEFT
 		{
@@ -1521,16 +1556,20 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 			case left_flag:
 				start.y -= my_speed;
 				set_edges();
-				dummy.left = start.x;
-				dummy.right = end.x;
-				dummy.up = start.y;
-				dummy.down = end.y;
-				if (!Intersect(dummy, bumped_obstacle))
+				if (end.y < bumped_obstacle.up)
 				{
-					bumped = false;
-					break;
-				}
-				break;
+					start.x -= my_speed;
+					set_edges();
+					dummy.left = start.x;
+					dummy.right = end.x;
+					dummy.up = start.y;
+					dummy.down = end.y;
+					if (!Intersect(dummy, bumped_obstacle))
+					{
+						bumped = false;
+						break;
+					}
+				}break;
 
 			case down_flag:
 				start.x -= my_speed;
@@ -1592,16 +1631,16 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 				break;
 
 			case up_left_flag:
-				start.y -= my_speed;
+				start.y += my_speed;
 				set_edges();
-				dummy.left = start.x;
-				dummy.right = end.x;
-				dummy.up = start.y;
-				dummy.down = end.y;
-				if (end.y <= bumped_obstacle.up)
+				if (start.y > bumped_obstacle.down)
 				{
 					start.x -= my_speed;
 					set_edges();
+					dummy.left = start.x;
+					dummy.right = end.x;
+					dummy.up = start.y;
+					dummy.down = end.y;
 					if (!Intersect(dummy, bumped_obstacle))
 					{
 						bumped = false;
@@ -1611,16 +1650,16 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 				break;
 
 			case down_left_flag:
-				start.y += my_speed;
+				start.y -= my_speed;
 				set_edges();
-				dummy.left = start.x;
-				dummy.right = end.x;
-				dummy.up = start.y;
-				dummy.down = end.y;
-				if (start.y >= bumped_obstacle.down)
+				if (end.y < bumped_obstacle.up)
 				{
 					start.x -= my_speed;
 					set_edges();
+					dummy.left = start.x;
+					dummy.right = end.x;
+					dummy.up = start.y;
+					dummy.down = end.y;
 					if (!Intersect(dummy, bumped_obstacle))
 					{
 						bumped = false;
@@ -1697,40 +1736,45 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 			case right_flag:
 				start.y += my_speed;
 				set_edges();
-				dummy.left = start.x;
-				dummy.right = end.x;
-				dummy.up = start.y;
-				dummy.down = end.y;
-				if (!Intersect(dummy, bumped_obstacle))
-				{
-					bumped = false;
-					break;
-				}
-				break;
-
-			case up_right_flag:
-				start.y -= my_speed;
-				set_edges();
-				dummy.left = start.x;
-				dummy.right = end.x;
-				dummy.up = start.y;
-				dummy.down = end.y;
-				if (end.y <= bumped_obstacle.up)
+				if (start.y > bumped_obstacle.down)
 				{
 					start.x += my_speed;
 					set_edges();
+					dummy.left = start.x;
+					dummy.right = end.x;
+					dummy.up = start.y;
+					dummy.down = end.y;
 					if (!Intersect(dummy, bumped_obstacle))
 					{
 						bumped = false;
 						break;
 					}
 				}
+				break;
 
+			case up_right_flag:
+				start.y += my_speed;
+				set_edges();
+				if (start.y > bumped_obstacle.down)
+				{
+					start.x += my_speed;
+					set_edges();
+					dummy.left = start.x;
+					dummy.right = end.x;
+					dummy.up = start.y;
+					dummy.down = end.y;
+					if (!Intersect(dummy, bumped_obstacle))
+					{
+						bumped = false;
+						break;
+					}
+				}
 				break;
 
 			case up_left_flag:
 				start.x += my_speed;
-				start.y = start.x * slope + intercept; set_edges();
+				start.y = start.x * slope + intercept; 
+				set_edges();
 				dummy.left = start.x;
 				dummy.right = end.x;
 				dummy.up = start.y;
@@ -1757,16 +1801,16 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 				break;
 
 			case down_right_flag:
-				start.y += my_speed;
+				start.y -= my_speed;
 				set_edges();
-				dummy.left = start.x;
-				dummy.right = end.x;
-				dummy.up = start.y;
-				dummy.down = end.y;
-				if (start.y >= bumped_obstacle.down)
+				if (end.y < bumped_obstacle.up)
 				{
 					start.x += my_speed;
 					set_edges();
+					dummy.left = start.x;
+					dummy.right = end.x;
+					dummy.up = start.y;
+					dummy.down = end.y;
 					if (!Intersect(dummy, bumped_obstacle))
 					{
 						bumped = false;
@@ -1776,16 +1820,7 @@ void dll::ORCS::Move(BAG<ASSETS>& obstacles, float gear)
 				break;
 			}	
 		}
-		else
-		{
-			start.y -= my_speed;
-			set_edges();
-			dummy.left = start.x;
-			dummy.right = end.x;
-			dummy.up = start.y;
-			dummy.down = end.y;
-			if (!Intersect(dummy, bumped_obstacle))bumped = false;
-		}
+		else bumped = false;
 	}
 }
 
