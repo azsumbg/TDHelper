@@ -151,6 +151,10 @@ dll::ASSETS::ASSETS(assets _what_type, float _start_x, float _start_y) :PROTON(_
 	case assets::big_tree:
 		new_dims(65.0f, 60.0f);
 		break;
+
+	case assets::wall:
+		new_dims(70.0f, 70.0f);
+		break;
 	}
 }
 
@@ -222,7 +226,7 @@ dll::SHOTS::SHOTS(shots _what, float _where_x, float _where_y,
 	case shots::cannonball:
 		new_dims(40.0f, 40.0f);
 		strenght = 5 + _shot_modifier;
-		speed = 3.0f + _shot_modifier;
+		speed = 3.5f + _shot_modifier;
 		break;
 
 	case shots::spell:
@@ -432,7 +436,7 @@ void dll::BUILDINGS::set_type(buildings what)
 		strenght = 10;
 		lifes = 75;
 		fire_rate = 75;
-		range = 100.0f;
+		range = 300.0f;
 		max_frames = 57;
 		frame_delay = 1;
 		break;
@@ -442,7 +446,7 @@ void dll::BUILDINGS::set_type(buildings what)
 		strenght = 15;
 		lifes = 100;
 		fire_rate = 100;
-		range = 130.0f;
+		range = 330.0f;
 		max_frames = 9;
 		frame_delay = 7;
 		break;
@@ -452,7 +456,7 @@ void dll::BUILDINGS::set_type(buildings what)
 		strenght = 30;
 		fire_rate = 130;
 		lifes = 150;
-		range = 150.0f;
+		range = 350.0f;
 		max_frames = 90;
 		frame_delay = 1;
 		break;
@@ -462,7 +466,7 @@ void dll::BUILDINGS::set_type(buildings what)
 		strenght = 12;
 		lifes = 100;
 		fire_rate = 50;
-		range = 130.0f;
+		range = 330.0f;
 		max_frames = 36;
 		frame_delay = 2;
 		break;
@@ -472,7 +476,7 @@ void dll::BUILDINGS::set_type(buildings what)
 		strenght = 18;
 		lifes = 120;
 		fire_rate = 75;
-		range = 150.0f;
+		range = 350.0f;
 		max_frames = 34;
 		frame_delay = 2;
 		break;
@@ -480,7 +484,7 @@ void dll::BUILDINGS::set_type(buildings what)
 	case buildings::big_mage:
 		new_dims(32.0f, 90.0f);
 		strenght = 30;
-		lifes = 180;
+		lifes = 380;
 		fire_rate = 100;
 		range = 200.0f;
 		max_frames = 97;
@@ -570,7 +574,7 @@ dll::ORCS::ORCS(orcs _what, float _sx, float _sy) :PROTON(_sx, _sy)
 	case orcs::warrior1:
 		new_dims(50.0f, 57.0f);
 		strenght = 10;
-		speed = 0.8f;
+		speed = 0.6f;
 		lifes = 50;
 		max_frames = 7;
 		attack_delay = 25;
@@ -580,7 +584,7 @@ dll::ORCS::ORCS(orcs _what, float _sx, float _sy) :PROTON(_sx, _sy)
 	case orcs::warrior2:
 		new_dims(55.0f, 57.0f);
 		strenght = 12;
-		speed = 0.7f;
+		speed = 0.5f;
 		lifes = 60;
 		max_frames = 9;
 		attack_delay = 30;
@@ -590,7 +594,7 @@ dll::ORCS::ORCS(orcs _what, float _sx, float _sy) :PROTON(_sx, _sy)
 	case orcs::healer:
 		new_dims(45.0f, 42.0f);
 		strenght = 15;
-		speed = 0.5f;
+		speed = 0.4f;
 		lifes = 40;
 		max_frames = 45;
 		attack_delay = 50;
@@ -600,7 +604,7 @@ dll::ORCS::ORCS(orcs _what, float _sx, float _sy) :PROTON(_sx, _sy)
 	case orcs::crusher:
 		new_dims(50.0f, 31.0f);
 		strenght = 18;
-		speed = 0.6f;
+		speed = 0.f;
 		lifes = 80;
 		max_frames = 39;
 		attack_delay = 60;
@@ -610,7 +614,7 @@ dll::ORCS::ORCS(orcs _what, float _sx, float _sy) :PROTON(_sx, _sy)
 	case orcs::flyer:
 		new_dims(45.0f, 37.0f);
 		strenght = 10;
-		speed = 1.0f;
+		speed = 0.7f;
 		lifes = 40;
 		max_frames = 33;
 		attack_delay = 20;
@@ -620,8 +624,8 @@ dll::ORCS::ORCS(orcs _what, float _sx, float _sy) :PROTON(_sx, _sy)
 	case orcs::champion:
 		new_dims(150.0f, 148.0f);
 		strenght = 100;
-		speed = 0.3f;
-		lifes = 150;
+		speed = 0.2f;
+		lifes = 350;
 		max_frames = 9;
 		attack_delay = 150;
 		frame_delay = 7;
